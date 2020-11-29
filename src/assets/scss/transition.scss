@@ -1,0 +1,118 @@
+.script-bf-box {
+  width: 40px;
+  height: 80px;
+  background: black;
+  margin: 5px;
+  will-change: transform;
+}
+
+.script-bf-box:hover {
+  background: rgb(233, 37, 95);
+}
+
+.script-box {
+  will-change: width, height, left, top;
+  position: relative;
+}
+
+.product-device {
+  position: absolute;
+  right: 10%;
+  bottom: -30%;
+  width: 300px;
+  height: 540px;
+  // background-color: #242729;
+  // border-radius: 21px;
+  -webkit-transform: rotate(30deg);
+  transform: rotate(30deg);
+  &::before {
+    position: absolute;
+    top: 10%;
+    right: 10px;
+    bottom: 10%;
+    left: 10px;
+    content: "";
+    // background-color: rgba(255, 255, 255,0.5);
+    // border-radius: 5px;
+  }
+}
+
+.card-rex {
+  width: 100%;
+  height: 45ch;
+  background: grey;
+  border-radius: 5px;
+  background-image: url(https://drscdn.500px.org/photo/435236/q%3D80_m%3D1500/v2?webp=true&sig=67031bdff6f582f3e027311e2074be452203ab637c0bd21d89128844becf8e40);
+  background-size: cover;
+  background-position: center center;
+  box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.5s;
+  will-change: transform;
+  border: 15px solid white;
+  &:hover {
+    box-shadow: 0px 30px 100px -10px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.c {
+  position: absolute;
+  width: 50ch;
+  height: 40.6ch;
+  cursor: pointer;
+  will-change: transform, opacity;
+  
+  &.back {
+    background-image: url(https://images.unsplash.com/photo-1544511916-0148ccdeb877?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1901&q=80i&auto=format&fit=crop);
+    width: 78%;
+  }
+  
+  &.front {
+    background-image: url(https://images.unsplash.com/photo-1540206395-68808572332f?ixlib=rb-1.2.1&w=1181&q=80&auto=format&fit=crop);
+    width: 78%;
+  }
+}
+
+.front,
+.back {
+  background-size: cover;
+}
+
+.carousel-caption {
+  color: #808080 !important;
+}
+
+.MuiIconButton-root {
+  background: #eccece !important;
+  border-radius: 0 !important;
+}
+
+.nav-tabs {
+  .nav-link {
+    border-radius: 0 !important;
+    border:1px solid #7e848933 !important;
+    &.active {
+      color:#007bff !important;
+      font-weight: bold;
+    }
+    &:not(.active) {
+      color:#495057 !important;
+    }
+  }
+}
+
+.navbar-nav {
+  a {
+    color:rgba(0,0,0,.5);
+    margin: 0 5px;
+    &.active {
+      color:#007bff !important;
+      font-weight: bold;
+    }
+    &:hover {
+      color: #007bff !important;
+      text-decoration: none;
+    }
+  }
+}
+
+

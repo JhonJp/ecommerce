@@ -1,0 +1,63 @@
+// Variables
+$black:#000000;
+$white:#ffffff;
+$lightGrey: #e6e6e6;
+$darkGrey: #333;
+$red: #ff1755;
+$sidebar-bg:#f1f1f1;
+$sidebar-width:250px;
+$topnav-color:#009ade;
+$border-color:#dbdee0;
+
+//sidebar color
+$sidebar-active:rgb(58, 193, 204);
+$sidebar-notactive:#1c9ad6;
+
+//sidebar pro variables
+$sidebar-bg-color:#f1f1f1;
+$sidebar-width:250px;
+$sidebar-color: #1c9ad6;
+$submenu-bg-color:#f1f1f1;
+
+// Mixins
+@mixin translateY($e) {
+    -webkit-transform: translateY($e);
+    -moz-transform: translateY($e);
+    transform: translateY($e);
+}
+
+@mixin transition($e) {
+    -webkit-transition: $e;
+    -moz-transition: $e;
+    transition: $e;
+}
+
+// regular css
+body {
+    font-family: 'Open-Sans', sans-serif;
+    font-size: 16px;
+    color: $black;
+    font-weight: 400;
+    font-style: normal;
+    background-color: $sidebar-bg;
+    height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #e3d8d8;
+}
+
+.root {
+    background-color: #e3d8d8;
+}
+
+footer {
+    a {
+        &:hover {
+            color: #007bff !important;
+            text-decoration: none;
+        }
+    }
+}
+
+
