@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Row, Col, Image, Table, Button, Spinner, Toast } from 'react-bootstrap';
+import { Row, Col, Image, Table, Button, Spinner } from 'react-bootstrap';
 import { FaCartPlus, FaMoneyBill } from 'react-icons/fa';
 import Coupons from '../coupons/coupons';
 

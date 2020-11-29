@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import Particle from 'particles-bg';
 import { Row, Col, Carousel, Image, Tab, Nav, Card, Pagination, Button } from 'react-bootstrap';
 import { Spring } from 'react-spring/renderprops';
-import { IconButton } from '@material-ui/core';
 import { FaCartPlus, FaEye, FaChevronRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Coupons from '../coupons/coupons';
