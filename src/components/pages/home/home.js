@@ -153,7 +153,7 @@ class Home extends Component {
     let upcomingPageNum = [];
     for(let i = 1; i <= Math.ceil(this.props.upcoming.length / 6); i++ ){
       upcomingPageNum.push(
-        <Pagination.Item key={i} active={i === this.state.currentPage} id={i} onClick={this.handleupcomingPage}>
+        <Pagination.Item key={i} active={i === this.state.currentupcomingPage} id={i} onClick={this.handleupcomingPage}>
           {i}
         </Pagination.Item>
       );
