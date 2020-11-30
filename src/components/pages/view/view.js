@@ -14,15 +14,27 @@ const View = (props) => {
     });
 
     const capitalizeFirstLetter = (str) => {
-        return str === undefined ? '' : str.charAt(0).toUpperCase() + str.slice(1);
+        if(str === undefined){
+            return str === undefined ? '' : str.charAt(0).toUpperCase() + str.slice(1);
+        } else if(str === null) {
+            return str === null ? '' : str.charAt(0).toUpperCase() + str.slice(1);
+        } else {
+            return str === '' ? '' : str.charAt(0).toUpperCase() + str.slice(1);
+        }
+        
     }
 
     const loadData = async () => {
         try{
-            const response = await fetch("https://flcosmetics-34043.firebaseio.com/allProducts.json?print=pretty");
+            // const response = await fetch("https://fortnite-api.theapinetwork.com/item/get?id="+id);
+            // const data = await response.json();
+            // const spec = data.filter((y) => y.itemId === id);
+            // setInfo(spec);
+            const response = await fetch("https://fortnite-api.theapinetwork.com/item/get?id="+id);
             const data = await response.json();
-            const spec = data.filter((y) => y.itemId === id);
-            setInfo(spec);
+            let x = [];
+            x.push(data.data);
+            setInfo(x);
         }catch(e){
             console.log(e);
         }
@@ -63,17 +75,17 @@ const View = (props) => {
                                 </tr>
                                 <tr>
                                     <td style={{ width: "20%" }}><b>Price</b></td>
-                                    <td>Php. {Number(item.store.cost).toFixed(2)}</td>
+                                    <td>Php. {Number(item.item.cost).toFixed(2)}</td>
                                 </tr>
                             </tbody>
                         </Table>
                         <Col style={{ padding: "0" }}>
                             <Button variant="info" onClick={()=>{
                                     props.addShoppingCartItem(item.itemId,"1",
-                                    item.store.cost,
+                                    item.item.cost,
                                     capitalizeFirstLetter(item.item.name)+"-"+capitalizeFirstLetter(item.item.type)+"-"+capitalizeFirstLetter(item.item.rarity),
                                     item.item.images.background,
-                                    Number(item.store.cost)
+                                    Number(item.item.cost)
                                     )
                                 }
                             }>
