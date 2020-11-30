@@ -14,12 +14,12 @@ const View = (props) => {
     });
 
     const capitalizeFirstLetter = (str) => {
-        return str.charAt(0).toUpperCase() + str.slice(1);
+        return str === undefined ? '' : str.charAt(0).toUpperCase() + str.slice(1);
     }
 
     const loadData = async () => {
         try{
-            const response = await fetch("https://portfolio-a537a.firebaseio.com/products.json?print=pretty");
+            const response = await fetch("https://flcosmetics-34043.firebaseio.com/allProducts.json?print=pretty");
             const data = await response.json();
             const spec = data.filter((y) => y.itemId === id);
             setInfo(spec);
@@ -27,20 +27,6 @@ const View = (props) => {
             console.log(e);
         }
     }
-
-    // const addShoppingCartItem = (itemid,itemQty,itP,itN) => {
-    //     let cart = JSON.parse(localStorage.getItem("shoppingCart"));
-    //     let itemddata = {
-    //       "itemId": ""+itemid,
-    //       "itemName":""+itN,
-    //       "itemQty":""+itemQty,
-    //       "itemPrice":""+itP,
-    //     }
-    //     cart.push(itemddata);
-    //     localStorage.removeItem("shoppingCart");
-    //     localStorage.setItem("shoppingCart",JSON.stringify(cart));
-    
-    // }
 
     let item = itemInfo.map((item,index) => {
         return (
@@ -85,7 +71,10 @@ const View = (props) => {
                             <Button variant="info" onClick={()=>{
                                     props.addShoppingCartItem(item.itemId,"1",
                                     item.store.cost,
-                                    capitalizeFirstLetter(item.item.name)+"-"+capitalizeFirstLetter(item.item.type)+"-"+capitalizeFirstLetter(item.item.rarity))
+                                    capitalizeFirstLetter(item.item.name)+"-"+capitalizeFirstLetter(item.item.type)+"-"+capitalizeFirstLetter(item.item.rarity),
+                                    item.item.images.background,
+                                    Number(item.store.cost)
+                                    )
                                 }
                             }>
                             <span>

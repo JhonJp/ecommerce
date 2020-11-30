@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Navigation from '../navigation/navigation';
 import '../../assets/css/default.min.css';
 
 import Home from './home/home';
@@ -9,6 +8,7 @@ import Products from './products/products';
 import View from './view/view';
 import Cart from './cart/cart';
 import Footer from './footer/footer';
+import Navigation from '../navigation/navigation';
 
 import {
   BrowserRouter as Router,
@@ -38,7 +38,7 @@ class Content extends Component {
     }
   }
 
-  addShoppingCartItem = (itemid,itemQty,itP,itN) =>{
+  addShoppingCartItem = (itemid,itemQty,itP,itN,itimg,itSTP) =>{
     try{
       let txcart = JSON.parse(localStorage.getItem("shoppingCart"));
       let itemddata = {
@@ -46,6 +46,8 @@ class Content extends Component {
         "itemName":""+itN,
         "itemQty":""+itemQty,
         "itemPrice":""+itP,
+        "itemImg":""+itimg,
+        "itemSTP":""+itSTP,
       }
       txcart.push(itemddata);
       localStorage.removeItem("shoppingCart");
@@ -65,12 +67,14 @@ class Content extends Component {
           //console.log(ucart[itemIndex].itemId);
         } else {
           ucart[itemIndex].itemQty = (Number(ucart[itemIndex].itemQty) - 1);
+          ucart[itemIndex].itemPrice = ((Number(ucart[itemIndex].itemSTP)) * (Number(ucart[itemIndex].itemQty)));
         }
         this.setState({ cart: ucart })
       } else if(proc === 2){
         delete ucart.splice(itemIndex,1);
       } else {
         ucart[itemIndex].itemQty = (Number(ucart[itemIndex].itemQty) + 1);
+        ucart[itemIndex].itemPrice = ((Number(ucart[itemIndex].itemSTP)) * (Number(ucart[itemIndex].itemQty)));
         this.setState({ cart: ucart })
       }
       localStorage.removeItem("shoppingCart");
@@ -97,6 +101,9 @@ class Content extends Component {
                   footer={this.props.footer} 
                   products={this.props.products}
                   navigation={this.props.navigation}
+                  upcoming={this.props.upcoming}
+                  popular={this.props.popular}
+                  collections={this.props.collections}
                   addShoppingCartItem={this.addShoppingCartItem}
                   />
               </Route>
@@ -107,6 +114,9 @@ class Content extends Component {
                   footer={this.props.footer} 
                   products={this.props.products}
                   navigation={this.props.navigation}
+                  upcoming={this.props.upcoming}
+                  popular={this.props.popular}
+                  collections={this.props.collections}
                   addShoppingCartItem={this.addShoppingCartItem}
                   />
               </Route>
@@ -117,6 +127,9 @@ class Content extends Component {
                   footer={this.props.footer} 
                   navigation={this.props.navigation}
                   products={this.props.products}
+                  upcoming={this.props.upcoming}
+                  popular={this.props.popular}
+                  collections={this.props.collections}
                   addShoppingCartItem={this.addShoppingCartItem}
                   />
               </Route>
@@ -127,6 +140,9 @@ class Content extends Component {
                   footer={this.props.footer} 
                   products={this.props.products}
                   navigation={this.props.navigation}
+                  upcoming={this.props.upcoming}
+                  popular={this.props.popular}
+                  collections={this.props.collections}
                   addShoppingCartItem={this.addShoppingCartItem}
                   />
               </Route>
@@ -136,7 +152,10 @@ class Content extends Component {
                   coupons={this.props.coupons} 
                   footer={this.props.footer} 
                   products={this.props.products}  
-                  navigation={this.props.navigation}                
+                  navigation={this.props.navigation} 
+                  upcoming={this.props.upcoming}
+                  popular={this.props.popular}
+                  collections={this.props.collections}               
                   addShoppingCartItem={this.addShoppingCartItem}
                   />
               </Route>
@@ -149,6 +168,9 @@ class Content extends Component {
                   addShoppingCartItem={this.addShoppingCartItem}
                   updateCartItemQty={this.updateCartItemQty} 
                   navigation={this.props.navigation}
+                  upcoming={this.props.upcoming}
+                  popular={this.props.popular}
+                  collections={this.props.collections}
                   cart={this.state.cart}
                    />
               </Route>
@@ -158,12 +180,16 @@ class Content extends Component {
                   coupons={this.props.coupons} 
                   footer={this.props.footer} 
                   products={this.props.products}
-                  navigation={this.props.navigation}                
+                  navigation={this.props.navigation} 
+                  upcoming={this.props.upcoming}
+                  popular={this.props.popular}
+                  collections={this.props.collections}               
                   addShoppingCartItem={this.addShoppingCartItem}
                   />
               </Route>
           </Switch>
-          <Footer navigation={this.props.navigation } footer={this.props.footer}/>
+
+          <Footer navigation={this.props.navigation } footer={this.props.footer} />
         </Router>
       </>
     );

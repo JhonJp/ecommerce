@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Spinner, Row, Col, Table, Button } from 'react-bootstrap';
+import { Spinner, Row, Col, Table, Button, Modal } from 'react-bootstrap';
 import { FaMoneyBillAlt, FaTrash, FaEye } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -12,11 +12,20 @@ class Cart extends Component {
     this.state = {
       loading:true,
       cart:[],
+      modalShow: false,
     }
   }
 
   componentDidMount(){
     this.obtainCartItems();
+  }
+
+  emptyCart = () => {
+    console.log(localStorage.getItem("shoppingCart"));
+    if(localStorage.getItem("shoppingCart") !== null) {
+      localStorage.removeItem("shoppingCart");
+    }
+    window.location.href = "/";
   }
 
   obtainCartItems = () => {
@@ -28,6 +37,10 @@ class Cart extends Component {
 
   capitalizeFirstLetter(str){
     return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  handleModal = () => {
+    this.setState({ modalShow: !this.state.modalShow });
   }
   
   render (){
@@ -110,6 +123,18 @@ class Cart extends Component {
       <>
         <div className="container">
 
+        <Modal show={this.state.modalShow} onHide={()=>this.handleModal()}>  
+          <Modal.Header closeButton>
+            <Modal.Title>Empty shopping cart.?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Woohoo, you are about to EMPTY your shopping cart.<br/> Are you sure to continue?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={()=>this.emptyCart()}>
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
             <Row>
                 <h3> Your Shopping Cart </h3>
             </Row>
@@ -137,7 +162,7 @@ class Cart extends Component {
                         </span> Proceed Checkout
                         </Button>
                         &nbsp;
-                        <Button variant="danger">
+                        <Button variant="danger" onClick={() => this.handleModal() }>
                         <span>
                             <FaTrash />
                         </span> Empty Cart

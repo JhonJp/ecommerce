@@ -16,16 +16,9 @@ class Footer extends Component {
                 <Link className="text-muted" to={item.url}>{this.capitalizeFirstLetter(item.label)}</Link>
             </li>
           );
-      });
-        let collections = this.props.footer.collections.map((item,i)=>{
-            return(
-            <li key={i}>
-                <Link className="text-muted" to={item.url}>{this.capitalizeFirstLetter(item.label)}</Link>
-            </li>
-            );
         });
 
-        let products = this.props.footer.products.map((item,i)=>{
+        let socialmedia = this.props.footer.products.map((item,i)=>{
             return(
             <li key={i}>
                 <Link className="text-muted" to={item.url}>{this.capitalizeFirstLetter(item.label)}</Link>
@@ -42,36 +35,31 @@ class Footer extends Component {
         });
     return(
       <>
+
         <footer className="py-5 bg-light" style={{marginTop:"20px"}}>
             <div className="container container-fluid">
                 <Row>
-                    <Col>
+                    <Col className="col-md-4 col-md">
                         <Image src={this.props.navigation.logo[1].url}/>
                         <small className="d-block mb-3 text-muted">&copy; 2019-2021</small>
                         <p>{this.props.footer.shortAbout}</p>
                     </Col>
-                    <Col className="col-6 col-md">
+                    <Col>
                         <h5>Navigations</h5>
                         <ul className="list-unstyled text-small">
                             {nav}
                         </ul>
                     </Col>
-                    <Col className="col-6 col-md">
-                        <h5>Collections</h5>
-                        <ul className="list-unstyled text-small">
-                            {collections}
-                        </ul>
-                    </Col>
-                    <Col className="col-6 col-md">
-                        <h5>Category</h5>
-                        <ul className="list-unstyled text-small">
-                            {products}
-                        </ul>
-                    </Col>
-                    <Col className="col-6 col-md">
+                    <Col>
                         <h5>Promotions</h5>
                         <ul className="list-unstyled text-small">
                             {promotions}
+                        </ul>
+                    </Col>
+                    <Col>
+                        <h5>Social Media</h5>
+                        <ul className="list-unstyled text-small">
+                            {socialmedia}
                         </ul>
                     </Col>
                 </Row>

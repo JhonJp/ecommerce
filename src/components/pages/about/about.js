@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Particle from 'particles-bg';
 import { Row, Col, Image } from 'react-bootstrap';
 import { Spring } from 'react-spring/renderprops';
+import Coupons from '../coupons/coupons';
 
 class About extends Component {
 
@@ -42,6 +43,8 @@ class About extends Component {
             </Col>
           </Row>
         </div>
+        
+        <Coupons coupons={this.props.coupons} />
       </>
     );
   }

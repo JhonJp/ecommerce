@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 class Navigation extends Component {
     state = {
         active:0,
-        navBackground:"none",
+        navBackground:"none"
     }
 
     changeState = index => {
@@ -15,7 +15,6 @@ class Navigation extends Component {
     }
 
     componentDidMount() {
-        
         document.addEventListener("scroll", () => {
             const bgColor = window.scrollY < 100 ? "none":"light";
             this.setState({ navBackground: bgColor });

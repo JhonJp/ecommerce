@@ -2,7 +2,7 @@
   "name": "fl-cosmetics",
   "version": "1.0.0",
   "private": true,
-  "proxy": "https://portfolio-a537a.firebaseio.com/",
+  "proxy": "https://flcosmetics-34043.firebaseio.com/",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-brands-svg-icons": "^5.15.1",
@@ -16,6 +16,7 @@
     "@testing-library/user-event": "^12.1.10",
     "bootstrap": "^4.5.3",
     "delay": "^4.4.0",
+    "firebase": "^8.1.1",
     "gulp": "^4.0.2",
     "gulp-changed": "^4.0.2",
     "gulp-clean-css": "^4.3.0",

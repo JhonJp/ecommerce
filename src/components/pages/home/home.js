@@ -14,10 +14,12 @@ class Home extends Component {
       value:'',
       products:'emote',
       currentPage:1,
-      productPerPage:10,
+      productPerPage:6,
+      currentupcomingPage:1,
       allproducts:this.props.products,
     }
     this.handlePage = this.handlePage.bind(this);
+    this.handleupcomingPage = this.handleupcomingPage.bind(this);
   }
 
   handlePage(index){
@@ -26,13 +28,16 @@ class Home extends Component {
     });
   }
 
+  handleupcomingPage(index){
+    this.setState({
+      currentupcomingPage: Number(index.target.id),
+    });
+  }
+
   setProductCategory = index => {
     this.setState({
       value:'',
       products:index,
-      currentPage:1,
-      productPerPage:10,
-      allproducts:this.props.products,
     });
   }
 
@@ -65,29 +70,46 @@ class Home extends Component {
       );
     })
     
+    //collection items
     let indexofLastProducts = this.state.currentPage * this.state.productPerPage;
     let indexofFirstProducts = indexofLastProducts - this.state.productPerPage;
-    let currentProducts = this.state.allproducts.filter((y) => y.item.type === this.state.products).slice(indexofFirstProducts,indexofLastProducts);
+    let filterd = this.state.allproducts.filter((y) => y.item.type === this.state.products);
+    let currentProducts = filterd.slice(indexofFirstProducts,indexofLastProducts);
+
+    //upcoming items
+    let indexofLastUpcoming = this.state.currentupcomingPage * this.state.productPerPage;
+    let indexofFirstUpcoming = indexofLastUpcoming - this.state.productPerPage;
+    let currentUpcoming = this.props.upcoming.slice(indexofFirstUpcoming,indexofLastUpcoming);
     
+    //collection items loop per item
     let prodItem = currentProducts.map((item,index) => {
       return(
-        <Col md={3} sm={4} lg={3} key={index} style={{ marginTop:"5px" }}>
+        <Col md={3} sm={4} lg={2} key={index} style={{ marginTop:"5px" }}>
             <Card className="text-center" style={{ backgroundColor:"#c7c7c7" }}>
               <Card.Img variant="top" src={item.item.images.background} style={{ padding:"5%" }} />
-              <Card.Body>
+              {/* <Card.Body>
                 <Link to={`/view/${item.itemId}`} >
                   <Card.Title style={{ fontSize: "16px" }}>{this.capitalizeFirstLetter(item.item.name)}</Card.Title>
-                </Link>
-              </Card.Body>
+                </Link>                
+                <p>Php. {Number(item.store.cost).toFixed(2)}</p>
+              </Card.Body> */}
               <Card.Footer>
+                <Link to={`/view/${item.itemId}`} >
+                  <Card.Title style={{ fontSize: "16px" }}>
+                    { this.capitalizeFirstLetter(item.item.name) }
+                  </Card.Title>
+                </Link>                
                 <p>Php. {Number(item.store.cost).toFixed(2)}</p>
                 <div style={{ display: "flex", justifyContent: "space-between"}} >
                   <Button variant="outline-dark" className="btn-sm" onClick={()=>this.props.addShoppingCartItem(item.itemId,"1",item.store.cost,
-                  this.capitalizeFirstLetter(item.item.name)+"-"+this.capitalizeFirstLetter(item.item.type)+"-"+this.capitalizeFirstLetter(item.item.rarity))}>
+                  this.capitalizeFirstLetter(item.item.name)+"-"+this.capitalizeFirstLetter(item.item.type)+"-"+this.capitalizeFirstLetter(item.item.rarity),
+                  item.item.images.background,
+                  Number(item.store.cost))}>
                     <span title="Add to Cart">
                       <FaCartPlus />
                     </span>
                   </Button>
+                  
                   <Link to={`/view/${item.itemId}`} >
                     <span className="btn btn-sm btn-outline-info" title="View">
                       <FaEye />
@@ -99,9 +121,27 @@ class Home extends Component {
         </Col>
       );
     });
+
+    //upcoming items loop per item
+    let produpcomingItem = currentUpcoming.map((item,index) => {
+      return(
+        <Col md={3} sm={4} lg={2} key={index} style={{ marginTop:"5px" }}>
+            <Card className="text-center" style={{ backgroundColor:"#c7c7c7" }}>
+              <Card.Img variant="top" src={item.item.images.background} style={{ padding:"5%" }} />
+              <Card.Footer>
+                <Card.Title style={{ fontSize: "16px" }}>
+                  { this.capitalizeFirstLetter(item.item.name) }
+                </Card.Title>      
+                <p>Php. ???.??</p>
+              </Card.Footer>
+            </Card>
+        </Col>
+      );
+    });
     
+    //collection items
     let pageNumbers = [];
-    for(let i = 1; i <= Math.ceil(currentProducts.length / this.state.productPerPage); i++ ){
+    for(let i = 1; i <= Math.ceil(filterd.length / this.state.productPerPage); i++ ){
       pageNumbers.push(
         <Pagination.Item key={i} active={i === this.state.currentPage} id={i} onClick={this.handlePage}>
           {i}
@@ -109,7 +149,17 @@ class Home extends Component {
       );
     }
 
-    let cateList = ['emote','outfit','pickaxe','glider','bundle','wrap'];
+    //upcoming item
+    let upcomingPageNum = [];
+    for(let i = 1; i <= Math.ceil(this.props.upcoming.length / 6); i++ ){
+      upcomingPageNum.push(
+        <Pagination.Item key={i} active={i === this.state.currentPage} id={i} onClick={this.handleupcomingPage}>
+          {i}
+        </Pagination.Item>
+      );
+    }
+
+    let cateList = ['emote','music','outfit','pickaxe','glider','bundle','wrap'];
     let cate = [];
     let tabpane = [];
     for(let x=0;x < cateList.length; x++ ){
@@ -127,7 +177,7 @@ class Home extends Component {
           <Row style={{ marginRight:"0",marginLeft:"0" }}>
             {prodItem}
             <Col md={12} className="text-right" style={{ marginTop:"25px" }}>
-              <Pagination>{pageNumbers}</Pagination>
+              <Pagination >{pageNumbers}</Pagination>
             </Col>
           </Row>
         </Tab.Pane>
@@ -137,7 +187,7 @@ class Home extends Component {
     return(
       <>
       <Particle type="cobweb" bg={true} />
-      <div className="position-relative overflow-hidden p-md-5 text-center" style={{ minHeight: "650px" }}>
+      <div className="position-relative overflow-hidden p-md-5 text-center" style={{ minHeight: "550px" }}>
         
         <Row md={12}>
           <Col md={4}>
@@ -175,7 +225,12 @@ class Home extends Component {
       {/* Another list here below the main header or banner */}
       <Coupons coupons={this.props.coupons}/>
 
-      {/* Products */}
+      {/* Collections */}
+      <Row>
+        <Col style={{ padding: "3%" }}>
+          <h3 className="text-center">Our Collections</h3>
+        </Col>
+      </Row>
       <Tab.Container id="left-tabs-example" defaultActiveKey="emote">
         <Row>
           <Col sm={2}>
@@ -190,6 +245,19 @@ class Home extends Component {
           </Col>
         </Row>
       </Tab.Container>
+
+      {/* Upcoming */}
+      <Row>
+        <Col style={{ padding: "3%" }}>
+          <h3 className="text-center">Upcoming Items</h3>
+        </Col>
+      </Row>
+      <Row style={{ marginRight:"0",marginLeft:"0" }}>
+        {produpcomingItem}
+        <Col md={12} className="text-right" style={{ marginTop:"25px" }}>
+          <Pagination style={{ justifyContent: "center" }}>{upcomingPageNum}</Pagination>
+        </Col>
+      </Row>
       </>
     );
   }
