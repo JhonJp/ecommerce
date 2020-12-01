@@ -13,7 +13,7 @@ class Collections extends Component {
       products:'emote',
       currentPage:1,
       productPerPage:18,
-      allproducts:this.props.products,
+      allproducts:this.props.collections,
     }
 
     this.handlePage = this.handlePage.bind(this);
