@@ -85,7 +85,7 @@ const View = (props) => {
                         <Col style={{ padding: "0" }}>
                             <Button variant="info" onClick={()=>{
                                     props.addShoppingCartItem(item.itemId,"1",
-                                    item.item.cost,
+                                    item.store.cost,
                                     capitalizeFirstLetter(item.item.name)+"-"+capitalizeFirstLetter(item.item.type)+"-"+capitalizeFirstLetter(item.item.rarity),
                                     item.item.images.background,
                                     Number(item.item.cost)
