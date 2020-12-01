@@ -88,7 +88,7 @@ const View = (props) => {
                                     item.store.cost,
                                     capitalizeFirstLetter(item.item.name)+"-"+capitalizeFirstLetter(item.item.type)+"-"+capitalizeFirstLetter(item.item.rarity),
                                     item.item.images.background,
-                                    Number(item.item.cost)
+                                    Number(item.store.cost)
                                     )
                                 }
                             }>
