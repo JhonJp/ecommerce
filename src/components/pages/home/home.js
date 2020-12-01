@@ -130,9 +130,11 @@ class Home extends Component {
               <Card.Img variant="top" src={item.item.images.background} style={{ padding:"5%" }} />
               <Card.Footer>
                 <Card.Title style={{ fontSize: "16px" }}>
-                  { this.capitalizeFirstLetter(item.item.name) }
+                  <Link to={`/view/${item.itemId}`} >
+                    { this.capitalizeFirstLetter(item.item.name) }
+                  </Link>
                 </Card.Title>      
-                <p>Php. ???.??</p>
+                <p>Php. {Number(item.store.cost).toFixed(2)}</p>
               </Card.Footer>
             </Card>
         </Col>

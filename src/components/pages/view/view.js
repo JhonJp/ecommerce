@@ -20,21 +20,20 @@ const View = (props) => {
             return str === null ? '' : str.charAt(0).toUpperCase() + str.slice(1);
         } else {
             return str === '' ? '' : str.charAt(0).toUpperCase() + str.slice(1);
-        }
-        
+        }        
     }
 
     const loadData = async () => {
         try{
+            const response = await fetch("https://flcosmetics-34043.firebaseio.com/allProducts.json?print=pretty");
+            const data = await response.json();
+            const spec = data.filter((y) => y.itemId === id);
+            setInfo(spec);
             // const response = await fetch("https://fortnite-api.theapinetwork.com/item/get?id="+id);
             // const data = await response.json();
-            // const spec = data.filter((y) => y.itemId === id);
-            // setInfo(spec);
-            const response = await fetch("https://fortnite-api.theapinetwork.com/item/get?id="+id);
-            const data = await response.json();
-            let x = [];
-            x.push(data.data);
-            setInfo(x);
+            // let x = [];
+            // x.push(data.data);
+            // setInfo(x);
         }catch(e){
             console.log(e);
         }
@@ -74,8 +73,12 @@ const View = (props) => {
                                     <td>{capitalizeFirstLetter(item.item.type)}</td>
                                 </tr>
                                 <tr>
+                                    <td style={{ width: "20%" }}><b>Available Stock</b></td>
+                                    <td>{Number(item.stock)}</td>
+                                </tr>
+                                <tr>
                                     <td style={{ width: "20%" }}><b>Price</b></td>
-                                    <td>Php. {Number(item.item.cost).toFixed(2)}</td>
+                                    <td>Php. {Number(item.store.cost).toFixed(2)}</td>
                                 </tr>
                             </tbody>
                         </Table>
