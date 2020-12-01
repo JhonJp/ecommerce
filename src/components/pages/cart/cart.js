@@ -51,6 +51,9 @@ class Cart extends Component {
       item.push(
         <tr key={i}>
           <td>{i + 1}</td>
+          <td style={{ justifyContent: "center" }} className="text-center">
+            <img alt={this.state.cart[i].itemName} src={this.state.cart[i].itemImg} className="img-fluid img-thumbnail" style={{ backgroundColor:"#c7c7c7", width: "50px" }} />
+          </td>
           <td>{this.capitalizeFirstLetter(this.state.cart[i].itemName)}</td>
           <td style={{ textAlign:"center" }}>
             <Row>
@@ -145,6 +148,7 @@ class Cart extends Component {
                       <thead>
                         <tr style={{ textAlign:"center" }}>
                           <th>#</th>
+                          <th>Image</th>
                           <th>Item Name</th>
                           <th>Quantity</th>
                           <th>Price</th>
