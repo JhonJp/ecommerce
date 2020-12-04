@@ -2,6 +2,12 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# Demo can be found on this link
+
+Hosted on Netlify.
+[F&L Cosmetics] (https://flcosmetics.netlify.app)
+
+
 ## Available Scripts
 
 In the project directory, you can run:
