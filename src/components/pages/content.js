@@ -45,12 +45,13 @@ class Content extends Component {
   }
 
   emptyCartState = () => {
+    localStorage.removeItem("_sc");
     if(this.state.cart.length !== 0){
-      this.state.cart = [];
+      // this.state.cart = [];
       this.setState({ cart: [], cartItems: 0 });
     }
     // console.log(this.state.cart);
-    window.location.href = "/";
+    // window.location.href = "/";
   }
 
   updateCartCount = () => {

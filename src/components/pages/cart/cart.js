@@ -128,7 +128,10 @@ class Cart extends Component {
           </Modal.Header>
           <Modal.Body>Woohoo, you are about to EMPTY your shopping cart.<br/> Are you sure to continue?</Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={()=>this.props.emptyCartState() }>
+            <Button variant="primary" onClick={()=>{
+              this.props.emptyCartState();
+              this.handleModal();
+             } }>
               Confirm
             </Button>
           </Modal.Footer>
