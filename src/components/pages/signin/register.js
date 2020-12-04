@@ -53,7 +53,7 @@ class Register extends Component {
                     { this.props.error ? (
                       <>
                         <Col md={12}>
-                          <span style={{ color: "#ff3737" }}> Error encountered. {this.props.errorMsg} Please refresh the page and try again. </span>
+                          <span style={{ color: "#ff3737" }}> {this.props.errorMsg} </span>
                         </Col>
                     </>
                     ) : '' }

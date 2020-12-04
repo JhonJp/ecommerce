@@ -50,6 +50,7 @@ class Content extends Component {
       // this.state.cart = [];
       this.setState({ cart: [], cartItems: 0 });
     }
+    setTimeout(() => window.location.href="/", 2000);
     // console.log(this.state.cart);
     // window.location.href = "/";
   }
