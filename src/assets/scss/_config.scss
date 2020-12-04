@@ -44,17 +44,17 @@ body {
     margin: 0;
     overflow-x: hidden;
     overflow-y: auto;
-    background-color: #e3d8d8;
+    background-color: #000000;
 }
 
 .root {
-    background-color: #e3d8d8;
+    background-color: #000000;
 }
 
 footer {
     a {
         &:hover {
-            color: #007bff !important;
+            color: #ac0653 !important;
             text-decoration: none;
         }
     }

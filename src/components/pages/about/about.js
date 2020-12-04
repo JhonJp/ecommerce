@@ -13,9 +13,9 @@ class About extends Component {
   render (){
     return(
       <>
-        <Particle type="colors" bg={true} />
-        <div className="position-relative overflow-hidden p-md-5 text-center" style={{ minHeight: "650px" }}>
-          <Row md={12}>
+        <Particle type="cobweb" bg={true} />
+        <div className="position-relative overflow-hidden p-md-5 text-center" style={{ minHeight: "450px" }}>
+          <Row>
             <Col>
               <Spring
                     from={{ opacity:0 }}
@@ -25,21 +25,13 @@ class About extends Component {
                     {ps=>(
                         <Image
                         src={this.props.headline.about.logo}
-                        className="img-fluid" />
+                        className="img-fluid" style={{ height:"250px" }}/>
                     )}
                   </Spring>
-              <Spring
-                  from={{ opacity:0,marginBottom:-500 }}
-                  to={{ opacity:1, marginBottom:0 }}
-                  config={{ delay: 1000, duration: 1000 }}
-                  > 
-                  {pr=>(
-                    <div style={pr}>
+                  <div>
                         <h1 className="display-4 font-weight-normal">{ this.props.headline.about.label }</h1>
                         <p>{ this.props.headline.about.message }</p>
                     </div>
-                  )}
-                </Spring>
             </Col>
           </Row>
         </div>

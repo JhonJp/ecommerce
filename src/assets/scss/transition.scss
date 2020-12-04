@@ -82,16 +82,20 @@
 }
 
 .MuiIconButton-root {
-  background: #eccece !important;
+  background: #555455 !important;
   border-radius: 0 !important;
+  .MuiIconButton-label {
+    color: #ffffff;
+  }
 }
 
 .nav-tabs {
   .nav-link {
     border-radius: 0 !important;
     border:1px solid #7e848933 !important;
+    
     &.active {
-      color:#007bff !important;
+      color:#c50646 !important;
       font-weight: bold;
     }
     &:not(.active) {
@@ -105,14 +109,18 @@
     color:rgba(0,0,0,.5);
     margin: 0 5px;
     &.active {
-      color:#007bff !important;
+      color:#c50646 !important;
       font-weight: bold;
     }
     &:hover {
-      color: #007bff !important;
+      color: #ac0653 !important;
       text-decoration: none;
     }
   }
+}
+
+#basic-nav-dropdown {
+  padding: 0 0.5rem !important;
 }
 
 .card-body {
@@ -123,4 +131,7 @@
   padding: 0.5rem 0.75rem !important;
 }
 
+.carousel-inner {
+  height: 460px !important;
+}
 

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Content from './components/pages/content';
 import { apiCall } from './components/api/api';
 import Spinner from 'react-bootstrap/Spinner';
+import fire from './components/firebase';
+import firebase from 'firebase/app';
 
 class App extends Component {
 
@@ -28,59 +30,202 @@ class App extends Component {
       popular:[],
       upcoming:[],
       cart:[],
+      user:{},
+      appended: false,
+      error: false,
+      errorMsg: '',
     }
   }
 
   //detect if view has mounted
   componentDidMount(){
-    if(localStorage.getItem("shoppingCart") === null){
-      this.createShoppingCart();
-    } else{
-      this.setState({ cart: localStorage.getItem("shoppingCart")});
-    }
+    window.addEventListener('beforeunload', () =>{
+        this.setState({ appended: true});
+    });
+    
     this.loadAllProducts();
+    this.loadFooter();
     this.loadPopular();
     this.loadUpcoming();
     this.loadCollections();
-    
+    this.loadCoupons();
     this.loadNavigations();
+
+    this.loadHeadline();
+    
+    this.authListener();
   }
 
-  createShoppingCart(){
-    localStorage.setItem("shoppingCart",JSON.stringify(this.state.cart));
-    // console.log("created localstorage");
+  //handle firebase signin user
+  handleSignin = async(e, email, password) => {
+    this.setState({ loading: true });
+    e.preventDefault();
+    await fire
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((result) => {
+      this.setState({ user: result.user });
+      this.setState({ loading: false });
+    }).catch((err) => {
+      // console.log(err);
+      this.setState({ loading: true, error:true, errorMsg: err.message });
+    });
+    // console.log(this.state.user)
   }
+
+  //handle signout of firebase
+  handleLogout = async(e) => {
+    this.setState({ loading: true });
+    e.preventDefault();
+    await fire.auth().signOut().then(() => {
+      this.setState({ loading: false });
+      window.location.href = "/";
+    }).catch((error) => {
+      console.log(error.message);
+    });
+  }
+
+  //handle signin using google
+  handleGoogleSignin = async(e) => {
+    e.preventDefault();
+    this.setState({ loading: true });
+    const provider = new firebase.auth.GoogleAuthProvider();
+    await fire.auth().signInWithPopup(provider)
+    .then((result) => {
+      this.setState({ user: result.user });
+      this.setState({ loading: false });
+    }).catch((err) => {
+      switch(err.code){
+        case "auth/popup-closed-by-user":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+        case "auth/user-token-expired":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+        case "auth/user-disabled":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+        case "auth/network-request-failed":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+        case "auth/unauthorized-domain":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+          default:
+            this.setState({ loading: false, error: true, errorMsg: err.message });
+            break;
+      }
+      // console.log(err);
+    });
+    // console.log(this.state.user)
+  }
+
+  //handle signin using facebook
+  handleFacebookSignin = async(e) => {
+    e.preventDefault();
+    this.setState({ loading: true });
+    const provider = new firebase.auth.FacebookAuthProvider();
+    await fire.auth().signInWithPopup(provider)
+    .then((result) => {
+      this.setState({ user: result.user });
+      this.setState({ loading: false });
+    }).catch((err) => {
+      switch(err.code){
+        case "auth/popup-closed-by-user":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+        case "auth/user-token-expired":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+        case "auth/user-disabled":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+        case "auth/network-request-failed":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+        case "auth/unauthorized-domain":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+          default:
+            this.setState({ loading: false, error: true, errorMsg: err.message});
+            break;
+      }
+      // console.log(err);
+    });
+    // console.log(this.state.user)
+  }
+
+  //authenticate user
+  authListener()
+  {
+    fire.auth().onAuthStateChanged((u) =>{
+      if(u){
+        this.setState({ user: u });
+      } else {
+        this.setState({ user: null });
+      }
+    })
+  }
+
+  //handle register user and other information of the user
+  registerUser = async(e, fn, ln, mail, mobile, pswd) => {
+    e.preventDefault();
+    this.setState({ loading: true });
+    try{
+      await fire.auth().createUserWithEmailAndPassword(mail,pswd)
+      .then((res) => {
+        fire.database().ref('users/'+res.user.uid).set({
+          id: res.user.uid,
+          firstName: fn,
+          lastName: ln,
+          email: mail,
+          phone: mobile,
+          userType: 'customer'
+        });
+        
+        this.setState({ loading: false, error: true, errorMsg: 'Account has been registered, please use your email address and password to login.'});
+      })
+
+    }catch(err){
+      this.setState({ loading: false, error: true, errorMsg: 'Register encountered and error.' });
+    }
+  }
+
+  // createShoppingCart(){
+  //   localStorage.setItem("_sc",JSON.stringify(this.state.cart));
+  //   // console.log("created localstorage");
+  // }
 
   loadHeadline () {
-    return new Promise(() => setTimeout(() => this.getHeadline(), 1500));
+    return new Promise(() => setTimeout(() => this.getHeadline(), 2000));
   }
 
   loadNavigations () {
-    return new Promise(() => setTimeout(() => this.getNavigations(), 1500));
+    return new Promise(() => setTimeout(() => this.getNavigations(), 2000));
   }
 
   loadFooter () {
-    return new Promise(() => setTimeout(() => this.getFooterNav(), 1500));
+    return new Promise(() => setTimeout(() => this.getFooterNav(), 2000));
   }
 
   loadCoupons () {
-    return new Promise(() => setTimeout(() => this.getCoupons(), 1500));
+    return new Promise(() => setTimeout(() => this.getCoupons(), 2000));
   }
 
   loadCollections () {
-    return new Promise(() => setTimeout(() => this.getCollections(), 1500));
+    return new Promise(() => setTimeout(() => this.getCollections(), 2000));
   }
 
   loadUpcoming () {
-    return new Promise(() => setTimeout(() => this.getUpcoming(), 1500));
+    return new Promise(() => setTimeout(() => this.getUpcoming(), 2000));
   }
 
   loadPopular () {
-    return new Promise(() => setTimeout(() => this.getPopular(), 1500));
+    return new Promise(() => setTimeout(() => this.getPopular(), 2000));
   }
 
   loadAllProducts () {
-    return new Promise(() => setTimeout(() => this.getAllproducts(), 1500));
+    return new Promise(() => setTimeout(() => this.getAllproducts(), 2000));
   }
  
   async getNavigations() {
@@ -97,10 +242,6 @@ class App extends Component {
             popular:this.state.popular,
             collections:this.state.collections,
            });
-          if(this.state.loading)
-          {
-            this.getFooterNav();
-          }
        });
      }catch(err){
        console.log(err);
@@ -121,10 +262,6 @@ class App extends Component {
            popular: this.state.popular,
            collections: this.state.collections,
           });
-         if(this.state.loading)
-         {
-           this.getCollections();
-         }
       });
     }catch(err){
       console.log(err);
@@ -145,10 +282,6 @@ class App extends Component {
            popular: this.state.popular,
            collections: res,
           });
-         if(this.state.loading)
-         {
-           this.getHeadline();
-         }
       });
     }catch(err){
       console.log(err);
@@ -169,10 +302,6 @@ class App extends Component {
            popular: this.state.popular,
            collections: this.state.collections, 
           });
-         if(this.state.loading)
-         {
-           this.getCoupons();
-         }
       });
     }catch(err){
       console.log(err);
@@ -213,10 +342,6 @@ class App extends Component {
            popular: this.state.popular,
            collections: this.state.collections,
           });
-         if(this.state.loading)
-         {
-           this.loadPopular();
-         }
       });
     }catch(err){
       console.log(err);
@@ -275,6 +400,10 @@ class App extends Component {
       );
     }
 
+    if(this.state.appended){
+      return false;
+    }
+
     return(
       <>
         <Content 
@@ -286,9 +415,18 @@ class App extends Component {
           upcoming={this.state.upcoming}
           popular={this.state.popular}
           collections={this.state.collections}
+          user={this.state.user}
+          handleSignin={this.handleSignin}
+          handleLogout={this.handleLogout}
+          handleGoogleSignin={this.handleGoogleSignin}
+          handleFacebookSignin={this.handleFacebookSignin}
+          registerUser={this.registerUser}
+          error={this.state.error}
+          errorMsg={this.state.errorMsg}
           />
       </>
     );
+    
   }
 }
 

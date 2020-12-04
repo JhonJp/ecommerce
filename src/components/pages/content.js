@@ -9,6 +9,9 @@ import View from './view/view';
 import Cart from './cart/cart';
 import Footer from './footer/footer';
 import Navigation from '../navigation/navigation';
+import Signin from './signin/signin';
+import Register from './signin/register';
+import Forgot from './signin/forgotpswd';
 
 import {
   BrowserRouter as Router,
@@ -18,29 +21,53 @@ import {
 
 class Content extends Component {
 
-  state = {
-    navigation: this.props.navigation,
-    headline:this.props.headline,
-    cart:[],
+  constructor(props){
+    super(props);
+    this.state = {
+      navigation: this.props.navigation,
+      headline:this.props.headline,
+      cart:[],
+      cartItems:0,
+    }
   }
 
-  componentDidMount(){
-    if(localStorage.getItem("shoppingCart") === null){
-      localStorage.setItem("shoppingCart",JSON.stringify(this.state.cart));
-    }
+  componentDidMount(){    
     this.updateCartCount();
+    if(localStorage.getItem("_sc") !== null){
+      localStorage.removeItem("_sc");
+    }
+  }
+
+  componentWillUnmount() {
+    if(this.state.cart.length !== 0){
+      localStorage.setItem("_sc", JSON.stringify(this.state.cart));
+    }
+  }
+
+  emptyCartState = () => {
+    if(this.state.cart.length !== 0){
+      this.state.cart = [];
+      this.setState({ cart: [], cartItems: 0 });
+    }
+    // console.log(this.state.cart);
+    window.location.href = "/";
   }
 
   updateCartCount = () => {
-    let txcart = JSON.parse(localStorage.getItem("shoppingCart"));
-    if(txcart.length !== 0){
-      this.setState({ cart: txcart });
+    if(localStorage.getItem("_sc") !== null){
+      let txcart = JSON.parse(localStorage.getItem("_sc"));
+        for(let a = 0; a < txcart.length; a++){
+          this.state.cart.push(txcart[a]);
+        }
+    } else {
+      localStorage.removeItem("_sc");
     }
+    this.setState({ cartItems: Number(this.state.cart.length) });
   }
 
   addShoppingCartItem = (itemid,itemQty,itP,itN,itimg,itSTP) =>{
     try{
-      let txcart = JSON.parse(localStorage.getItem("shoppingCart"));
+      //  let txcart = JSON.parse(localStorage.getItem("_sc"));
       let itemddata = {
         "itemId": ""+itemid,
         "itemName":""+itN,
@@ -49,10 +76,11 @@ class Content extends Component {
         "itemImg":""+itimg,
         "itemSTP":""+itSTP,
       }
-      txcart.push(itemddata);
-      localStorage.removeItem("shoppingCart");
-      localStorage.setItem("shoppingCart",JSON.stringify(txcart));
-      this.setState({ cart: txcart });
+      this.state.cart.push(itemddata);
+      // localStorage.removeItem("_sc");
+      // localStorage.setItem("_sc",JSON.stringify(txcart));
+      // this.setState({ cart: txcart });
+      this.updateCartCount();
     }catch(e){
       console.log(e);
     }
@@ -69,16 +97,14 @@ class Content extends Component {
           ucart[itemIndex].itemQty = (Number(ucart[itemIndex].itemQty) - 1);
           ucart[itemIndex].itemPrice = ((Number(ucart[itemIndex].itemSTP)) * (Number(ucart[itemIndex].itemQty)));
         }
-        this.setState({ cart: ucart })
       } else if(proc === 2){
         delete ucart.splice(itemIndex,1);
       } else {
         ucart[itemIndex].itemQty = (Number(ucart[itemIndex].itemQty) + 1);
         ucart[itemIndex].itemPrice = ((Number(ucart[itemIndex].itemSTP)) * (Number(ucart[itemIndex].itemQty)));
-        this.setState({ cart: ucart })
       }
-      localStorage.removeItem("shoppingCart");
-      localStorage.setItem("shoppingCart", JSON.stringify(ucart));
+      // localStorage.removeItem("_sc");
+      // localStorage.setItem("_sc", JSON.stringify(ucart));
       this.setState({ cart: ucart });
     }catch(e){
       console.log(e);
@@ -92,7 +118,9 @@ class Content extends Component {
           <Navigation 
             navigation={this.props.navigation} 
             cart={Number(this.state.cart.length)} 
-            updateCartItemQty={this.updateCartItemQty} />
+            updateCartItemQty={this.updateCartItemQty}
+            handleLogout = {this.props.handleLogout}
+            user={this.props.user} />
           <Switch>
               <Route exact path="/" >
                 <Home 
@@ -105,6 +133,7 @@ class Content extends Component {
                   popular={this.props.popular}
                   collections={this.props.collections}
                   addShoppingCartItem={this.addShoppingCartItem}
+                  user={this.props.user} 
                   />
               </Route>
               <Route path="/about" >
@@ -118,6 +147,7 @@ class Content extends Component {
                   popular={this.props.popular}
                   collections={this.props.collections}
                   addShoppingCartItem={this.addShoppingCartItem}
+                  user={this.props.user} 
                   />
               </Route>
               <Route path="/collections" >
@@ -131,6 +161,7 @@ class Content extends Component {
                   popular={this.props.popular}
                   collections={this.props.collections}
                   addShoppingCartItem={this.addShoppingCartItem}
+                  user={this.props.user} 
                   />
               </Route>
               <Route path="/products" >
@@ -144,6 +175,7 @@ class Content extends Component {
                   popular={this.props.popular}
                   collections={this.props.collections}
                   addShoppingCartItem={this.addShoppingCartItem}
+                  user={this.props.user} 
                   />
               </Route>
               <Route path="/view/:id">
@@ -157,6 +189,7 @@ class Content extends Component {
                   popular={this.props.popular}
                   collections={this.props.collections}               
                   addShoppingCartItem={this.addShoppingCartItem}
+                  user={this.props.user} 
                   />
               </Route>
               <Route path="/cart">
@@ -167,12 +200,66 @@ class Content extends Component {
                   products={this.props.products}
                   addShoppingCartItem={this.addShoppingCartItem}
                   updateCartItemQty={this.updateCartItemQty} 
+                  emptyCartState={this.emptyCartState} 
                   navigation={this.props.navigation}
                   upcoming={this.props.upcoming}
                   popular={this.props.popular}
                   collections={this.props.collections}
                   cart={this.state.cart}
+                  user={this.props.user} 
                    />
+              </Route>
+              <Route path="/signin" >
+                <Signin 
+                  headline={this.props.headline} 
+                  coupons={this.props.coupons} 
+                  footer={this.props.footer} 
+                  products={this.props.products}
+                  navigation={this.props.navigation}
+                  upcoming={this.props.upcoming}
+                  popular={this.props.popular}
+                  collections={this.props.collections}
+                  hideSearch={true}
+                  user={this.props.user} 
+                  handleSignin={this.props.handleSignin}
+                  handleGoogleSignin={this.props.handleGoogleSignin}
+                  handleFacebookSignin={this.props.handleFacebookSignin}
+                  error={this.props.error}
+                  errorMsg={this.props.errorMsg}
+                  />
+              </Route>
+              <Route path="/register" >
+                <Register 
+                  headline={this.props.headline} 
+                  coupons={this.props.coupons} 
+                  footer={this.props.footer} 
+                  products={this.props.products}
+                  navigation={this.props.navigation}
+                  upcoming={this.props.upcoming}
+                  popular={this.props.popular}
+                  collections={this.props.collections}
+                  hideSearch={true}
+                  user={this.props.user} 
+                  error={this.props.error}
+                  errorMsg={this.props.errorMsg}
+                  registerUser={this.props.registerUser}
+                  />
+              </Route>              
+              <Route path="/forgot" >
+                <Forgot 
+                  headline={this.props.headline} 
+                  coupons={this.props.coupons} 
+                  footer={this.props.footer} 
+                  products={this.props.products}
+                  navigation={this.props.navigation}
+                  upcoming={this.props.upcoming}
+                  popular={this.props.popular}
+                  collections={this.props.collections}
+                  hideSearch={true}
+                  user={this.props.user} 
+                  error={this.props.error}
+                  errorMsg={this.props.errorMsg}
+                  />
               </Route>
               <Route path="*">
                 <Home 
@@ -185,6 +272,7 @@ class Content extends Component {
                   popular={this.props.popular}
                   collections={this.props.collections}               
                   addShoppingCartItem={this.addShoppingCartItem}
+                  user={this.props.user} 
                   />
               </Route>
           </Switch>

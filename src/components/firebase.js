@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firebase-database';
+import 'firebase/firebase-auth';
 
 const firebaseConfig = {
     apiKey: "AIzaSyDIOqVyDGBZ4wvFYTNzVp85ViEuv_V8G6E",
@@ -12,14 +13,7 @@ const firebaseConfig = {
     measurementId: "G-3B59G472F3"
   };
   // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-// let nav = firebase.database().ref("navigation");
-// nav.on('value',(snap) =>{
-//     let fnav = [];
-//     for(let i in snap.val()){
-//         fnav.push(snap[i]);
-//     }
-//     this.setState({ navigation: fnav });
-// });
+ const fire = firebase.initializeApp(firebaseConfig);
+ 
 
-export default firebase;
+export default fire;

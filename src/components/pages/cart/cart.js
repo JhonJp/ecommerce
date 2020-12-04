@@ -20,14 +20,6 @@ class Cart extends Component {
     this.obtainCartItems();
   }
 
-  emptyCart = () => {
-    console.log(localStorage.getItem("shoppingCart"));
-    if(localStorage.getItem("shoppingCart") !== null) {
-      localStorage.removeItem("shoppingCart");
-    }
-    window.location.href = "/";
-  }
-
   obtainCartItems = () => {
     try{
       let openCart = this.props.cart;
@@ -47,7 +39,11 @@ class Cart extends Component {
     let loading = this.state.loading;
 
     let item = [];
+    let totalSum = 0;
+    let totalQty = 0;
     for(let i = 0; i < this.state.cart.length; i++ ){
+      totalSum += Number(this.state.cart[i].itemPrice);
+      totalQty += Number(this.state.cart[i].itemQty);
       item.push(
         <tr key={i}>
           <td>{i + 1}</td>
@@ -64,7 +60,7 @@ class Cart extends Component {
                   onClick={()=>this.props.updateCartItemQty(i,0) }>-</Button>
               </Col>
               <Col>
-                <span style={{ fontWeight:"bold" }}>{this.state.cart[i].itemQty} pc(s)</span>
+                <span style={{ fontWeight:"bold" }}>{this.state.cart[i].itemQty}</span>
               </Col>
               <Col>                
                 <Button 
@@ -110,7 +106,7 @@ class Cart extends Component {
     if(this.state.cart.length === 0){
       return(
         <>
-          <div className="container" style={{ margin:"5%", overflow:"hidden" }}>
+          <div className="container" style={{ margin:"10% 15%", overflow:"hidden" }}>
             <Row md={12}>
               <Col>
                 <h3 className="text-center"> Your Shopping Cart is Empty </h3>
@@ -132,7 +128,7 @@ class Cart extends Component {
           </Modal.Header>
           <Modal.Body>Woohoo, you are about to EMPTY your shopping cart.<br/> Are you sure to continue?</Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={()=>this.emptyCart()}>
+            <Button variant="primary" onClick={()=>this.props.emptyCartState() }>
               Confirm
             </Button>
           </Modal.Footer>
@@ -158,6 +154,16 @@ class Cart extends Component {
                         <tbody>
                             { item }
                         </tbody>
+                        <tfoot>
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td style={{ fontWeight: "bold",textAlign:"right" }}>Total :</td>
+                            <td className="text-center">{totalQty} pc(s)</td>
+                            <td className="text-center">Php. {Number(totalSum).toFixed(2)}</td>
+                            <td></td>
+                          </tr>
+                        </tfoot>
                     </Table>
                     <Col style={{ padding: "0" }}>
                         <Button variant="info" >

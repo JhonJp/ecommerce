@@ -52,7 +52,7 @@ class Home extends Component {
     let headl = this.props.headline.mainHeadline.mainTitle ? this.props.headline.mainHeadline.mainTitle : "Welcome headline";
     let sub = this.props.headline.mainHeadline.subTitle.map((item,i)=> {
       return(
-        <Carousel.Item key={i} interval={5000} controls={false} style={{ height:"175px" }}>
+        <Carousel.Item key={i} interval={3000} controls={false} style={{ height:"175px" }}>
           <Carousel.Caption>
             <p>{ item.message }</p>
             <Link className={btnClass} to={btnTarget} >{ btnLabel }</Link>
@@ -62,10 +62,10 @@ class Home extends Component {
     });
     let slideImg = this.props.headline.mainHeadline.subTitle.map((item,i)=>{
       return(
-          <Carousel.Item key={i} interval={5000} controls={false} style={{ height:"auto" }}>    
+          <Carousel.Item key={i} interval={3000} controls={false} >    
             <Image
                   src={item.image}
-                  className="img-fluid" />
+                  className="img-fluid"/>
           </Carousel.Item>
       );
     })
@@ -189,10 +189,10 @@ class Home extends Component {
     return(
       <>
       <Particle type="cobweb" bg={true} />
-      <div className="position-relative overflow-hidden p-md-5 text-center" style={{ minHeight: "550px" }}>
+      <div className="position-relative overflow-hidden p-md-3 text-center">
         
-        <Row md={12}>
-          <Col md={4}>
+        <Row>
+          <Col md={5}>
             <Spring
                 from={{ opacity:0 }}
                 to={{ opacity:1 }}
@@ -205,11 +205,11 @@ class Home extends Component {
                 )}
               </Spring>
           </Col>
-          <Col md={8} style={{ margin: "10% 0"}} className="text-center">
+          <Col md={7} style={{ margin: "5% 0 0 0"}} className="text-center">
             <Spring
-              from={{ opacity:0,marginBottom:-500 }}
-              to={{ opacity:1, marginBottom:0 }}
-              config={{ delay: 1000, duration: 1000 }}
+              from={{ opacity:0 }}
+              to={{ opacity:1 }}
+              config={{ delay: 0, duration: 1000 }}
               > 
               {pr=>(
                 <div style={pr}>

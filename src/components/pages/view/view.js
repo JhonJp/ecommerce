@@ -42,18 +42,16 @@ const View = (props) => {
     let item = itemInfo.map((item,index) => {
         return (
             <div key={index}>
-                <Row>
+                <Row style={{ margin: 0 }}>
                     <h3> {capitalizeFirstLetter(item.item.name)} - {capitalizeFirstLetter(item.item.description)} </h3>
                 </Row>
                 <br/>
-                <Row md={10} >
-                    <Col md={4}>
-                        <Row>
-                            <Image src={item.item.images.background}
-                                className="img-fluid img-thumbnail" style={{ backgroundColor:"#c7c7c7"}} />
-                        </Row>
+                <Row md={12} >
+                    <Col md={4} sm={12}>
+                        <Image src={item.item.images.background}
+                            className="img-fluid img-thumbnail fluid" style={{ backgroundColor:"#c7c7c7"}} />
                     </Col>
-                    <Col md={6}>
+                    <Col md={6} sm={12}>
                         <Table responsive bordered>
                             <tbody>
                                 <tr>
@@ -104,7 +102,7 @@ const View = (props) => {
                             </Button>
                         </Col>
                     </Col>
-                    <Col md={2} style={{ boxShadow:"1px 1px 3px 2px #888888", border:"0.5px solid #c7c7c7"}} >
+                    <Col md={2} sm={12} style={{ boxShadow:"1px 1px 3px 2px #888888", border:"0.5px solid #c7c7c7"}} >
                         <div>Side content</div>
                     </Col>
                 </Row>
