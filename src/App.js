@@ -37,21 +37,24 @@ class App extends Component {
     }
   }
 
+  UNSAFE_componentWillMount(){
+    this.getNavigations();
+    this.getCollections();
+    this.getUpcoming();
+    this.getCoupons();
+  }
+
   //detect if view has mounted
   componentDidMount(){
     window.addEventListener('beforeunload', () =>{
         this.setState({ appended: true});
     });
     
-    this.loadAllProducts();
-    this.loadFooter();
-    this.loadPopular();
-    this.loadUpcoming();
-    this.loadCollections();
-    this.loadCoupons();
-    this.loadNavigations();
+    this.getAllproducts();
+    this.getFooterNav();
+    this.getPopular();
 
-    this.loadHeadline();
+    this.getHeadline();
     
     this.authListener();
   }
@@ -66,9 +69,28 @@ class App extends Component {
     .then((result) => {
       this.setState({ user: result.user });
       this.setState({ loading: false });
+      window.location.href = "/";
     }).catch((err) => {
-      // console.log(err);
-      this.setState({ loading: true, error:true, errorMsg: err.message });
+      switch(err.code){
+        case "auth/popup-closed-by-user":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+        case "auth/user-token-expired":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+        case "auth/user-disabled":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+        case "auth/network-request-failed":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+        case "auth/unauthorized-domain":
+          this.setState({ loading: false, error: true, errorMsg: err.message });
+          break;
+          default:
+            this.setState({ loading: false, error: true, errorMsg: err.message });
+            break;
+      }
     });
     // console.log(this.state.user)
   }
@@ -92,8 +114,18 @@ class App extends Component {
     const provider = new firebase.auth.GoogleAuthProvider();
     await fire.auth().signInWithPopup(provider)
     .then((result) => {
+      let un = result.user.displayName.split(" ");
+      fire.database().ref('users/'+result.user.uid).set({
+        id: result.user.uid,
+        firstName: un[0],
+        lastName: un[1],
+        email: result.user.email,
+        phone: result.user.phoneNumber,
+        userType: 'customer'
+      });
       this.setState({ user: result.user });
       this.setState({ loading: false });
+      window.location.href = "/";
     }).catch((err) => {
       switch(err.code){
         case "auth/popup-closed-by-user":
@@ -127,8 +159,18 @@ class App extends Component {
     const provider = new firebase.auth.FacebookAuthProvider();
     await fire.auth().signInWithPopup(provider)
     .then((result) => {
+      let un = result.user.displayName.split(" ");
+      fire.database().ref('users/'+result.user.uid).set({
+        id: result.user.uid,
+        firstName: un[0],
+        lastName: un[1],
+        email: result.user.email,
+        phone: result.user.phoneNumber,
+        userType: 'customer'
+      });
       this.setState({ user: result.user });
       this.setState({ loading: false });
+      window.location.href = "/";
     }).catch((err) => {
       switch(err.code){
         case "auth/popup-closed-by-user":
@@ -167,6 +209,11 @@ class App extends Component {
     })
   }
 
+  loadingState = () =>{
+    this.setState({ loading: true });
+    setTimeout(()=> this.setState({ loading: false }), 3000);
+  }
+
   //handle register user and other information of the user
   registerUser = async(e, fn, ln, mail, mobile, pswd) => {
     e.preventDefault();
@@ -184,6 +231,8 @@ class App extends Component {
         });
         
         this.setState({ loading: false, error: true, errorMsg: 'Account has been registered, please use your email address and password to login.'});
+
+        setTimeout(()=> { window.location.href = "/"},2000);
       })
 
     }catch(err){
@@ -195,38 +244,6 @@ class App extends Component {
   //   localStorage.setItem("_sc",JSON.stringify(this.state.cart));
   //   // console.log("created localstorage");
   // }
-
-  loadHeadline () {
-    return new Promise(() => setTimeout(() => this.getHeadline(), 2000));
-  }
-
-  loadNavigations () {
-    return new Promise(() => setTimeout(() => this.getNavigations(), 2000));
-  }
-
-  loadFooter () {
-    return new Promise(() => setTimeout(() => this.getFooterNav(), 2000));
-  }
-
-  loadCoupons () {
-    return new Promise(() => setTimeout(() => this.getCoupons(), 2000));
-  }
-
-  loadCollections () {
-    return new Promise(() => setTimeout(() => this.getCollections(), 2000));
-  }
-
-  loadUpcoming () {
-    return new Promise(() => setTimeout(() => this.getUpcoming(), 2000));
-  }
-
-  loadPopular () {
-    return new Promise(() => setTimeout(() => this.getPopular(), 2000));
-  }
-
-  loadAllProducts () {
-    return new Promise(() => setTimeout(() => this.getAllproducts(), 2000));
-  }
  
   async getNavigations() {
      try{
@@ -236,7 +253,6 @@ class App extends Component {
             footer:  this.state.footer, 
             coupons:  this.state.coupons, 
             headline: this.state.headline, 
-            loading: this.state.loading, 
             allproducts:this.state.allproducts,
             upcoming:this.state.upcoming,
             popular:this.state.popular,
@@ -255,8 +271,7 @@ class App extends Component {
            navigations:  this.state.navigations, 
            coupons: res, 
            footer:  this.state.footer, 
-           headline: this.state.headline, 
-           loading: this.state.loading,            
+           headline: this.state.headline,            
            allproducts: this.state.allproducts,
            upcoming: this.state.upcoming,
            popular: this.state.popular,
@@ -276,7 +291,6 @@ class App extends Component {
            coupons: this.state.coupons, 
            footer:  this.state.footer, 
            headline: this.state.headline, 
-           loading: this.state.loading,
            allproducts: this.state.allproducts,
            upcoming: this.state.upcoming,
            popular: this.state.popular,
@@ -295,8 +309,7 @@ class App extends Component {
            footer: res, 
            coupons:  this.state.coupons, 
            navigations:  this.state.navigations, 
-           headline: this.state.headline, 
-           loading: this.state.loading,            
+           headline: this.state.headline,          
            allproducts: this.state.allproducts,
            upcoming: this.state.upcoming,
            popular: this.state.popular,
@@ -316,7 +329,7 @@ class App extends Component {
            coupons:  this.state.coupons, 
            footer:  this.state.footer, 
            headline: res, 
-           loading: !this.state.loading,            
+           loading: false,            
            allproducts: this.state.allproducts,
            upcoming: this.state.upcoming,
            popular: this.state.popular,
@@ -335,8 +348,7 @@ class App extends Component {
            footer: this.state.footer, 
            coupons:  this.state.coupons, 
            navigations:  this.state.navigations, 
-           headline: this.state.headline, 
-           loading: this.state.loading,            
+           headline: this.state.headline,         
            allproducts: this.state.allproducts,
            upcoming: res,
            popular: this.state.popular,
@@ -355,8 +367,7 @@ class App extends Component {
            footer: this.state.footer, 
            coupons:  this.state.coupons, 
            navigations:  this.state.navigations, 
-           headline: this.state.headline, 
-           loading: this.state.loading,            
+           headline: this.state.headline,          
            allproducts: this.state.allproducts,
            upcoming: this.state.upcoming,
            popular: res,
@@ -375,8 +386,7 @@ class App extends Component {
            footer: this.state.footer, 
            coupons:  this.state.coupons, 
            navigations:  this.state.navigations, 
-           headline: this.state.headline, 
-           loading: this.state.loading,            
+           headline: this.state.headline,          
            allproducts: res,
            upcoming: this.state.upcoming,
            popular: this.state.popular,
@@ -423,6 +433,7 @@ class App extends Component {
           registerUser={this.registerUser}
           error={this.state.error}
           errorMsg={this.state.errorMsg}
+          loadingState={this.loadingState}
           />
       </>
     );

@@ -50,7 +50,7 @@ class Content extends Component {
       // this.state.cart = [];
       this.setState({ cart: [], cartItems: 0 });
     }
-    setTimeout(() => window.location.href="/", 2000);
+    setTimeout(() => window.location.href="/", 1000);
     // console.log(this.state.cart);
     // window.location.href = "/";
   }
@@ -209,6 +209,7 @@ class Content extends Component {
                   collections={this.props.collections}
                   cart={this.state.cart}
                   user={this.props.user} 
+                  loadingState={this.props.loadingState}
                    />
               </Route>
               <Route path="/signin" >
@@ -245,6 +246,8 @@ class Content extends Component {
                   error={this.props.error}
                   errorMsg={this.props.errorMsg}
                   registerUser={this.props.registerUser}
+                  handleGoogleSignin={this.props.handleGoogleSignin}
+                  handleFacebookSignin={this.props.handleFacebookSignin}
                   />
               </Route>              
               <Route path="/forgot" >

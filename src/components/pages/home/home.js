@@ -102,7 +102,7 @@ class Home extends Component {
                 <p>Php. {Number(item.store.cost).toFixed(2)}</p>
                 <div style={{ display: "flex", justifyContent: "space-between"}} >
                   <Button variant="outline-dark" className="btn-sm" onClick={()=>this.props.addShoppingCartItem(item.itemId,"1",item.store.cost,
-                  this.capitalizeFirstLetter(item.item.name)+"-"+this.capitalizeFirstLetter(item.item.type)+"-"+this.capitalizeFirstLetter(item.item.rarity),
+                  this.capitalizeFirstLetter(item.item.name).split('\'')[0]+"-"+this.capitalizeFirstLetter(item.item.type)+"-"+this.capitalizeFirstLetter(item.item.rarity),
                   item.item.images.background,
                   Number(item.store.cost))}>
                     <span title="Add to Cart">

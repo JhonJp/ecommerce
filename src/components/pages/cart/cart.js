@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Spinner, Row, Col, Table, Button, Modal } from 'react-bootstrap';
-import { FaMoneyBillAlt, FaTrash, FaEye } from 'react-icons/fa';
+import { FaTrash, FaEye, FaMoneyBillAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import Paypal from '../paypal/paypal';
 
 import Coupons from '../coupons/coupons';
 
@@ -13,7 +14,12 @@ class Cart extends Component {
       loading:true,
       cart:[],
       modalShow: false,
+      checkOut: false,
     }
+  }
+
+  paypalCheckout = () => {
+    this.setState({ checkOut : !this.state.checkOut });
   }
 
   componentDidMount(){
@@ -93,6 +99,19 @@ class Cart extends Component {
       )
     }
 
+    let cartObject = [];
+    for(let i = 0; i < this.state.cart.length; i++ ){
+      let amt = Number(Number(this.state.cart[i].itemPrice) / 50).toFixed(1);
+      let obj = {
+        description: this.capitalizeFirstLetter((this.state.cart[i].itemName).split('-')[0]).toString(),
+        amount: {
+          currency_code: "USD",
+          value: Number(amt).toFixed(2).toString(),
+        },
+      }
+      cartObject.push(obj)
+    }
+
     if(loading){
       return(
           <>
@@ -122,20 +141,20 @@ class Cart extends Component {
       <>
         <div className="container">
 
-        <Modal show={this.state.modalShow} onHide={()=>this.handleModal()}>  
-          <Modal.Header closeButton>
-            <Modal.Title>Empty shopping cart.?</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Woohoo, you are about to EMPTY your shopping cart.<br/> Are you sure to continue?</Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={()=>{
-              this.props.emptyCartState();
-              this.handleModal();
-             } }>
-              Confirm
-            </Button>
-          </Modal.Footer>
-        </Modal>
+            <Modal show={this.state.modalShow} onHide={()=>this.handleModal()}>  
+              <Modal.Header closeButton>
+                <Modal.Title>Empty shopping cart.?</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>Woohoo, you are about to EMPTY your shopping cart.<br/> Are you sure to continue?</Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" onClick={()=>{
+                  this.props.emptyCartState();
+                  this.handleModal();
+                } }>
+                  Confirm
+                </Button>
+              </Modal.Footer>
+            </Modal>
 
             <Row>
                 <h3> Your Shopping Cart </h3>
@@ -168,19 +187,44 @@ class Cart extends Component {
                           </tr>
                         </tfoot>
                     </Table>
-                    <Col style={{ padding: "0" }}>
-                        <Button variant="info" >
-                        <span>
-                            <FaMoneyBillAlt />
-                        </span> Proceed Checkout
+                    <Row style={{ padding: "0" }}>
+                      <Col md={6}>
+                        { this.props.user === null ? (
+                          <>
+                            <label>Register / Login to check our payment options.</label>
+                            <Link to="/signin">
+                              <Button variant="info">
+                              <span>
+                                  <FaMoneyBillAlt />
+                              </span> Checkout Now
+                              </Button>
+                            </Link>
+                          </>
+                        ) : (
+                          <>
+                            <label>Checkout With Paypal</label>
+                            <Paypal 
+                              data={cartObject}
+                              totalSum={Number(totalSum).toFixed(2)} 
+                              emptyCartState={this.props.emptyCartState} 
+                              user={this.props.user}
+                              loadingState={this.props.loadingState}
+                              />
+                          </>
+                        )}
+                      </Col>
+                      <Col className="text-right inline">
+                        <label>Delete Items on your cart?</label>
+                        <br />
+                        <Button variant="danger" onClick={() => 
+                        this.handleModal()
+                       }>
+                          <span>
+                              <FaTrash />
+                          </span> Empty Cart
                         </Button>
-                        &nbsp;
-                        <Button variant="danger" onClick={() => this.handleModal() }>
-                        <span>
-                            <FaTrash />
-                        </span> Empty Cart
-                        </Button>
-                    </Col>
+                      </Col>
+                    </Row>
                 </Col>
                 <Col md={2} style={{ boxShadow:"1px 1px 3px 2px #888888", border:"0.5px solid #c7c7c7"}} >
                     <div>Side content</div>
