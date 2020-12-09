@@ -36,7 +36,7 @@ class App extends Component {
       errorMsg: '',
     }
     
-    console.log(this.state.user)
+   // console.log(this.state.user)
   }
 
   //detect if view has mounted
