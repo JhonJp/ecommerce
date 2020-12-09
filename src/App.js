@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Content from './components/pages/content';
-import { apiCall } from './components/api/api';
+// import { apiCall } from './components/api/api';
 import Spinner from 'react-bootstrap/Spinner';
 import fire from './components/firebase';
 import firebase from 'firebase/app';
@@ -25,7 +25,7 @@ class App extends Component {
       headline:[],
       footer:[],
       coupons:[],
-      allproducts:[],
+      allProducts:[],
       collections:[],
       popular:[],
       upcoming:[],
@@ -53,6 +53,7 @@ class App extends Component {
     this.getHeadline();
     this.getFooterNav();
     this.getUpcoming();
+    
     this.authListener();
   }
 
@@ -258,20 +259,79 @@ class App extends Component {
   //   // console.log("created localstorage");
   // }
  
+  assignState = (result,state) => {
+    switch(state){
+      case "navigation":
+        this.setState({ 
+          navigations: result
+         });
+         console.log(this.state.navigations);
+         break;
+      case "headline":
+        this.setState({ 
+          headline: result,
+          loading:false
+         });
+         console.log(this.state.headline);
+         break;
+      case "footer":
+        this.setState({ 
+          footer: result
+         });
+         console.log(this.state.footer);
+         break;
+      case "coupons":
+        this.setState({ 
+          coupons: result
+         });
+         console.log(this.state.coupons);
+         break;
+      case "upcoming":
+        this.setState({ upcoming: result }); 
+        console.log(this.state.upcoming);
+        break;
+      case "popular":
+        this.setState({ popular: result }); 
+        console.log(this.state.popular);
+        break;
+      case "allProducts":
+        this.setState({ allProducts: result });
+        console.log(this.state.allProducts);
+        break;
+      case "collections":
+        this.setState({ collections: result });
+        console.log(this.state.collections);
+        break;
+      default:break;
+    }
+  }
+
+  getDataFromDB = async(dbname) =>{
+    firebase.database().ref(dbname)
+       .on('value', snapchat => {
+          const exists = snapchat.val() !== null;
+          if(exists){
+            let data = snapchat.val();
+            this.assignState(data,dbname);
+          }
+       });       
+  }
+
   getNavigations() {
      try{
-      apiCall(this.navigationURL, 'GET').then((res) => {
-          this.setState({ 
-            navigations: res, 
-            footer:  this.state.footer, 
-            coupons:  this.state.coupons, 
-            headline: this.state.headline, 
-            allproducts:this.state.allproducts,
-            upcoming:this.state.upcoming,
-            popular:this.state.popular,
-            collections:this.state.collections,
-           });
-       });
+       this.getDataFromDB('navigation');
+      // apiCall(this.navigationURL, 'GET').then((res) => {
+      //     this.setState({ 
+      //       navigations: res, 
+      //       footer:  this.state.footer, 
+      //       coupons:  this.state.coupons, 
+      //       headline: this.state.headline, 
+      //       allproducts:this.state.allproducts,
+      //       upcoming:this.state.upcoming,
+      //       popular:this.state.popular,
+      //       collections:this.state.collections,
+      //      });
+      //  });
      }catch(err){
        console.log(err);
      }
@@ -279,18 +339,19 @@ class App extends Component {
 
   getCoupons() {
     try{
-     apiCall(this.couponsURL, 'GET').then((res) => {
-         this.setState({ 
-           navigations:  this.state.navigations, 
-           coupons: res, 
-           footer:  this.state.footer, 
-           headline: this.state.headline,            
-           allproducts: this.state.allproducts,
-           upcoming: this.state.upcoming,
-           popular: this.state.popular,
-           collections: this.state.collections,
-          });
-      });
+      this.getDataFromDB('coupons');
+    //  apiCall(this.couponsURL, 'GET').then((res) => {
+    //      this.setState({ 
+    //        navigations:  this.state.navigations, 
+    //        coupons: res, 
+    //        footer:  this.state.footer, 
+    //        headline: this.state.headline,            
+    //        allproducts: this.state.allproducts,
+    //        upcoming: this.state.upcoming,
+    //        popular: this.state.popular,
+    //        collections: this.state.collections,
+    //       });
+    //   });
     }catch(err){
       console.log(err);
     }
@@ -298,18 +359,19 @@ class App extends Component {
 
   getCollections() {
     try{
-     apiCall(this.collectionsURL, 'GET').then((res) => {
-         this.setState({ 
-           navigations:  this.state.navigations, 
-           coupons: this.state.coupons, 
-           footer:  this.state.footer, 
-           headline: this.state.headline, 
-           allproducts: this.state.allproducts,
-           upcoming: this.state.upcoming,
-           popular: this.state.popular,
-           collections: res,
-          });
-      });
+      this.getDataFromDB('collections');
+    //  apiCall(this.collectionsURL, 'GET').then((res) => {
+    //      this.setState({ 
+    //        navigations:  this.state.navigations, 
+    //        coupons: this.state.coupons, 
+    //        footer:  this.state.footer, 
+    //        headline: this.state.headline, 
+    //        allproducts: this.state.allproducts,
+    //        upcoming: this.state.upcoming,
+    //        popular: this.state.popular,
+    //        collections: res,
+    //       });
+    //   });
     }catch(err){
       console.log(err);
     }
@@ -317,18 +379,19 @@ class App extends Component {
 
   getFooterNav() {
     try{
-     apiCall(this.footerURL, 'GET').then((res) => {
-         this.setState({ 
-           footer: res, 
-           coupons:  this.state.coupons, 
-           navigations:  this.state.navigations, 
-           headline: this.state.headline,          
-           allproducts: this.state.allproducts,
-           upcoming: this.state.upcoming,
-           popular: this.state.popular,
-           collections: this.state.collections, 
-          });
-      });
+      this.getDataFromDB('footer');
+    //  apiCall(this.footerURL, 'GET').then((res) => {
+    //      this.setState({ 
+    //        footer: res, 
+    //        coupons:  this.state.coupons, 
+    //        navigations:  this.state.navigations, 
+    //        headline: this.state.headline,          
+    //        allproducts: this.state.allproducts,
+    //        upcoming: this.state.upcoming,
+    //        popular: this.state.popular,
+    //        collections: this.state.collections, 
+    //       });
+    //   });
     }catch(err){
       console.log(err);
     }
@@ -336,19 +399,20 @@ class App extends Component {
 
   getHeadline() {
     try{
-      apiCall(this.headlineURL, 'GET').then((res) => {
-         this.setState({ 
-           navigations: this.state.navigations, 
-           coupons:  this.state.coupons, 
-           footer:  this.state.footer, 
-           headline: res, 
-           loading: false,            
-           allproducts: this.state.allproducts,
-           upcoming: this.state.upcoming,
-           popular: this.state.popular,
-           collections: this.state.collections, 
-          })
-      });
+      this.getDataFromDB('headline');
+      // apiCall(this.headlineURL, 'GET').then((res) => {
+      //    this.setState({ 
+      //      navigations: this.state.navigations, 
+      //      coupons:  this.state.coupons, 
+      //      footer:  this.state.footer, 
+      //      headline: res, 
+      //      loading: false,            
+      //      allproducts: this.state.allproducts,
+      //      upcoming: this.state.upcoming,
+      //      popular: this.state.popular,
+      //      collections: this.state.collections, 
+      //     })
+      // });
     }catch(err){
       console.log(err);
     }
@@ -356,18 +420,19 @@ class App extends Component {
   
   getUpcoming() {
     try{
-     apiCall(this.upcomingURL, 'GET').then((res) => {
-         this.setState({ 
-           footer: this.state.footer, 
-           coupons:  this.state.coupons, 
-           navigations:  this.state.navigations, 
-           headline: this.state.headline,         
-           allproducts: this.state.allproducts,
-           upcoming: res,
-           popular: this.state.popular,
-           collections: this.state.collections,
-          });
-      });
+      this.getDataFromDB('upcoming');
+    //  apiCall(this.upcomingURL, 'GET').then((res) => {
+    //      this.setState({ 
+    //        footer: this.state.footer, 
+    //        coupons:  this.state.coupons, 
+    //        navigations:  this.state.navigations, 
+    //        headline: this.state.headline,         
+    //        allproducts: this.state.allproducts,
+    //        upcoming: res,
+    //        popular: this.state.popular,
+    //        collections: this.state.collections,
+    //       });
+    //   });
     }catch(err){
       console.log(err);
     }
@@ -375,18 +440,7 @@ class App extends Component {
   
   getPopular() {
     try{
-     apiCall(this.popularURL, 'GET').then((res) => {
-         this.setState({ 
-           footer: this.state.footer, 
-           coupons:  this.state.coupons, 
-           navigations:  this.state.navigations, 
-           headline: this.state.headline,          
-           allproducts: this.state.allproducts,
-           upcoming: this.state.upcoming,
-           popular: res,
-           collections: this.state.collections,
-          });
-      });
+     this.getDataFromDB('popular');
     }catch(err){
       console.log(err);
     }
@@ -394,18 +448,19 @@ class App extends Component {
   
   getAllproducts() {
     try{
-     apiCall(this.allproductsURL, 'GET').then((res) => {
-         this.setState({ 
-           footer: this.state.footer, 
-           coupons:  this.state.coupons, 
-           navigations:  this.state.navigations, 
-           headline: this.state.headline,          
-           allproducts: res,
-           upcoming: this.state.upcoming,
-           popular: this.state.popular,
-           collections: this.state.collections,
-          });
-      });
+      this.getDataFromDB('allProducts');
+    //  apiCall(this.allproductsURL, 'GET').then((res) => {
+    //      this.setState({ 
+    //        footer: this.state.footer, 
+    //        coupons:  this.state.coupons, 
+    //        navigations:  this.state.navigations, 
+    //        headline: this.state.headline,          
+    //        allproducts: res,
+    //        upcoming: this.state.upcoming,
+    //        popular: this.state.popular,
+    //        collections: this.state.collections,
+    //       });
+    //   });
     }catch(err){
       console.log(err);
     }
@@ -434,7 +489,7 @@ class App extends Component {
           headline={this.state.headline} 
           coupons={this.state.coupons} 
           footer={this.state.footer} 
-          products={this.state.allproducts}
+          products={this.state.allProducts}
           upcoming={this.state.upcoming}
           popular={this.state.popular}
           collections={this.state.collections}
