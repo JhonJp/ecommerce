@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Spinner, Row, Col, Table, Button, Modal } from 'react-bootstrap';
 import { FaTrash, FaEye, FaMoneyBillAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import Paypal from '../paypal/paypal';
 
 import Coupons from '../coupons/coupons';
 
@@ -41,7 +40,7 @@ class Cart extends Component {
     this.setState({ modalShow: !this.state.modalShow });
   }
   
-  render (){
+  render () {
     let loading = this.state.loading;
 
     let item = [];
@@ -160,8 +159,8 @@ class Cart extends Component {
                 <h3> Your Shopping Cart </h3>
             </Row>
             <br/>
-            <Row md={10} >
-                <Col md={10}>
+            <Row md={12} >
+                <Col md={12}>
                     <Table responsive bordered>
                       <thead>
                         <tr style={{ textAlign:"center" }}>
@@ -188,30 +187,15 @@ class Cart extends Component {
                         </tfoot>
                     </Table>
                     <Row style={{ padding: "0" }}>
-                      <Col md={6}>
-                        { this.props.user === null ? (
-                          <>
-                            <label>Register / Login to check our payment options.</label>
-                            <Link to="/signin">
-                              <Button variant="info">
-                              <span>
-                                  <FaMoneyBillAlt />
-                              </span> Checkout Now
-                              </Button>
-                            </Link>
-                          </>
-                        ) : (
-                          <>
-                            <label>Checkout With Paypal</label>
-                            <Paypal 
-                              data={cartObject}
-                              totalSum={Number(totalSum).toFixed(2)} 
-                              emptyCartState={this.props.emptyCartState} 
-                              user={this.props.user}
-                              loadingState={this.props.loadingState}
-                              />
-                          </>
-                        )}
+                      <Col md={4}>
+                        <label>Check our payment options on the next page</label>
+                        <Link to="/choice">
+                          <Button variant="info">
+                          <span>
+                              <FaMoneyBillAlt />
+                          </span> Proceed to Payment
+                          </Button>
+                        </Link>
                       </Col>
                       <Col className="text-right inline">
                         <label>Delete Items on your cart?</label>
@@ -225,9 +209,6 @@ class Cart extends Component {
                         </Button>
                       </Col>
                     </Row>
-                </Col>
-                <Col md={2} style={{ boxShadow:"1px 1px 3px 2px #888888", border:"0.5px solid #c7c7c7"}} >
-                    <div>Side content</div>
                 </Col>
             </Row>
 

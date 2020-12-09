@@ -3,32 +3,10 @@ import { Row, Col, Button, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaFacebookSquare, FaGooglePlusSquare } from 'react-icons/fa';
 
-class Register extends Component {
+class CashDelivery extends Component {
 
   constructor(props){
     super(props);
-    this.state = {
-      email: '',
-      password: '',
-      mobile: '',
-      fname: '',
-      lname: '',
-    }
-  }
-
-  setValue(e){
-    // console.log(e.target.value)
-    if(e.target.id === "fname"){
-      this.setState({ fname: e.target.value })
-    } else if(e.target.id === "lname"){
-      this.setState({ lname: e.target.value })
-    } else if(e.target.id === "email"){
-      this.setState({ email: e.target.value })
-    } else if(e.target.id === "mobile"){
-      this.setState({ mobile: e.target.value })
-    } else if(e.target.id === "paswd"){
-      this.setState({ password: e.target.value })
-    }   
   }
 
   capitalizeFirstLetter(str){
@@ -42,12 +20,7 @@ class Register extends Component {
           <Row style={{ margin: "5%"}}>
             <Col md={6}>
               <Row style={{ borderRight: "1px solid #d1cbcb" }}>
-                <form style={{ margin: "5% 10%" }}  onSubmit={(e)=>this.props.registerUser(e, 
-                    this.state.fname, 
-                    this.state.lname, 
-                    this.state.email, 
-                    this.state.mobile, 
-                    this.state.password)}>
+                <form style={{ margin: "5% 10%" }}  >
                   <h3>Register Form</h3>
                   <Row md={8}>
                     { this.props.error ? (
@@ -100,7 +73,7 @@ class Register extends Component {
                   <Image src={ this.props.navigation.logo[1].url } alt={this.props.navigation.logo[1].title } className="img-thumbnail" />
                 </Col>
                 <Col md={12}>
-                  By Clicking <i>"Register"</i>, you agree to our Terms and Conditions in using your information for the purpose of our business or website to fullfill the delivery of items and other services that we are providing. 
+                  By Clicking "Register", you agree to our Terms and Conditions in using your information for the purpose of our business or website to fullfill the delivery of items and other services that we are providing. 
                 </Col>
                 <Col md={12} style={{ margin: "3% 0" }}>
                 <div>
@@ -126,4 +99,4 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default CashDelivery;

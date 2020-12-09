@@ -30,18 +30,13 @@ class App extends Component {
       popular:[],
       upcoming:[],
       cart:[],
-      user:{},
+      user:[],
       appended: false,
       error: false,
       errorMsg: '',
     }
-  }
-
-  UNSAFE_componentWillMount(){
-    this.getNavigations();
-    this.getCollections();
-    this.getUpcoming();
-    this.getCoupons();
+    
+    console.log(this.state.user)
   }
 
   //detect if view has mounted
@@ -50,12 +45,14 @@ class App extends Component {
         this.setState({ appended: true});
     });
     
+    this.getNavigations();
+    this.getCollections();
     this.getAllproducts();
-    this.getFooterNav();
     this.getPopular();
-
+    this.getCoupons();
     this.getHeadline();
-    
+    this.getFooterNav();
+    this.getUpcoming();
     this.authListener();
   }
 
@@ -67,8 +64,7 @@ class App extends Component {
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then((result) => {
-      this.setState({ user: result.user });
-      this.setState({ loading: false });
+      
       window.location.href = "/";
     }).catch((err) => {
       switch(err.code){
@@ -93,6 +89,20 @@ class App extends Component {
       }
     });
     // console.log(this.state.user)
+  }
+
+  //get user data onload 
+  getUserInfo(uid){
+    fire.database().ref().child('users')
+      .orderByChild('id')
+      .equalTo(uid)
+      .once('value')
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          let userData = snapshot.val();
+          this.setState({ user: userData[uid], loading: false });
+        }
+      });
   }
 
   //handle signout of firebase
@@ -121,7 +131,8 @@ class App extends Component {
         lastName: un[1],
         email: result.user.email,
         phone: result.user.phoneNumber,
-        userType: 'customer'
+        userType: 'customer',
+        address: ''
       });
       this.setState({ user: result.user });
       this.setState({ loading: false });
@@ -166,7 +177,8 @@ class App extends Component {
         lastName: un[1],
         email: result.user.email,
         phone: result.user.phoneNumber,
-        userType: 'customer'
+        userType: 'customer',
+        address: ''
       });
       this.setState({ user: result.user });
       this.setState({ loading: false });
@@ -202,7 +214,7 @@ class App extends Component {
   {
     fire.auth().onAuthStateChanged((u) =>{
       if(u){
-        this.setState({ user: u });
+        this.getUserInfo(u.uid);
       } else {
         this.setState({ user: null });
       }
@@ -227,7 +239,8 @@ class App extends Component {
           lastName: ln,
           email: mail,
           phone: mobile,
-          userType: 'customer'
+          userType: 'customer',
+          address: '',
         });
         
         this.setState({ loading: false, error: true, errorMsg: 'Account has been registered, please use your email address and password to login.'});
@@ -245,9 +258,9 @@ class App extends Component {
   //   // console.log("created localstorage");
   // }
  
-  async getNavigations() {
+  getNavigations() {
      try{
-      await apiCall(this.navigationURL, 'GET').then((res) => {
+      apiCall(this.navigationURL, 'GET').then((res) => {
           this.setState({ 
             navigations: res, 
             footer:  this.state.footer, 
@@ -264,9 +277,9 @@ class App extends Component {
      }
    }
 
-  async getCoupons() {
+  getCoupons() {
     try{
-     await apiCall(this.couponsURL, 'GET').then((res) => {
+     apiCall(this.couponsURL, 'GET').then((res) => {
          this.setState({ 
            navigations:  this.state.navigations, 
            coupons: res, 
@@ -283,9 +296,9 @@ class App extends Component {
     }
   }
 
-  async getCollections() {
+  getCollections() {
     try{
-     await apiCall(this.collectionsURL, 'GET').then((res) => {
+     apiCall(this.collectionsURL, 'GET').then((res) => {
          this.setState({ 
            navigations:  this.state.navigations, 
            coupons: this.state.coupons, 
@@ -302,9 +315,9 @@ class App extends Component {
     }
   }
 
-  async getFooterNav() {
+  getFooterNav() {
     try{
-     await apiCall(this.footerURL, 'GET').then((res) => {
+     apiCall(this.footerURL, 'GET').then((res) => {
          this.setState({ 
            footer: res, 
            coupons:  this.state.coupons, 
@@ -321,9 +334,9 @@ class App extends Component {
     }
   }
 
-  async getHeadline() {
+  getHeadline() {
     try{
-      await apiCall(this.headlineURL, 'GET').then((res) => {
+      apiCall(this.headlineURL, 'GET').then((res) => {
          this.setState({ 
            navigations: this.state.navigations, 
            coupons:  this.state.coupons, 
@@ -341,9 +354,9 @@ class App extends Component {
     }
   }
   
-  async getUpcoming() {
+  getUpcoming() {
     try{
-     await apiCall(this.upcomingURL, 'GET').then((res) => {
+     apiCall(this.upcomingURL, 'GET').then((res) => {
          this.setState({ 
            footer: this.state.footer, 
            coupons:  this.state.coupons, 
@@ -360,9 +373,9 @@ class App extends Component {
     }
   }
   
-  async getPopular() {
+  getPopular() {
     try{
-     await apiCall(this.popularURL, 'GET').then((res) => {
+     apiCall(this.popularURL, 'GET').then((res) => {
          this.setState({ 
            footer: this.state.footer, 
            coupons:  this.state.coupons, 
@@ -379,9 +392,9 @@ class App extends Component {
     }
   }
   
-  async getAllproducts() {
+  getAllproducts() {
     try{
-     await apiCall(this.allproductsURL, 'GET').then((res) => {
+     apiCall(this.allproductsURL, 'GET').then((res) => {
          this.setState({ 
            footer: this.state.footer, 
            coupons:  this.state.coupons, 

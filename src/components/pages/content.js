@@ -12,6 +12,9 @@ import Navigation from '../navigation/navigation';
 import Signin from './signin/signin';
 import Register from './signin/register';
 import Forgot from './signin/forgotpswd';
+import Paypal from './payment/paypal/paypal';
+import Choice from './payment/choice';
+import CashDelivery from './payment/cod/cod';
 
 import {
   BrowserRouter as Router,
@@ -266,6 +269,63 @@ class Content extends Component {
                   errorMsg={this.props.errorMsg}
                   />
               </Route>
+              
+              <Route path="/choice" >
+                <Choice 
+                  headline={this.props.headline} 
+                  coupons={this.props.coupons} 
+                  footer={this.props.footer} 
+                  products={this.props.products}
+                  navigation={this.props.navigation}
+                  upcoming={this.props.upcoming}
+                  popular={this.props.popular}
+                  collections={this.props.collections}
+                  hideSearch={true}
+                  cart={this.state.cart}
+                  user={this.props.user} 
+                  error={this.props.error}
+                  errorMsg={this.props.errorMsg}
+                  emptyCartState={this.emptyCartState}
+                  loadingState={this.props.loadingState}
+                  />
+              </Route> 
+              
+              <Route path="/cod" >
+                <CashDelivery 
+                  headline={this.props.headline} 
+                  coupons={this.props.coupons} 
+                  footer={this.props.footer} 
+                  products={this.props.products}
+                  navigation={this.props.navigation}
+                  upcoming={this.props.upcoming}
+                  popular={this.props.popular}
+                  collections={this.props.collections}
+                  hideSearch={true}
+                  user={this.props.user} 
+                  error={this.props.error}
+                  errorMsg={this.props.errorMsg}
+                  emptyCartState={this.emptyCartState}
+                  loadingState={this.props.loadingState}
+                  />
+              </Route> 
+              
+              <Route path="/paypal" >
+                <Paypal 
+                  headline={this.props.headline} 
+                  coupons={this.props.coupons} 
+                  footer={this.props.footer} 
+                  products={this.props.products}
+                  navigation={this.props.navigation}
+                  upcoming={this.props.upcoming}
+                  popular={this.props.popular}
+                  collections={this.props.collections}
+                  hideSearch={true}
+                  user={this.props.user} 
+                  error={this.props.error}
+                  errorMsg={this.props.errorMsg}
+                  />
+              </Route> 
+
               <Route path="*">
                 <Home 
                   headline={this.props.headline} 

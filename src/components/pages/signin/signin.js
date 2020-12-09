@@ -38,7 +38,7 @@ class Signin extends Component {
 
                     { this.props.error ? (
                       <>
-                      <span style={{ color: "#ff3737" }}> Error encountered. {this.props.errorMsg} Please consider changing your password and try again. </span>
+                      <span style={{ color: "#ff3737" }}> Error encountered. {this.props.errorMsg} Please check your credentials or consider changing your password. </span>
                       </>
                     ) : '' }
                     

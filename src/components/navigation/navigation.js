@@ -11,20 +11,57 @@ class Navigation extends Component {
         this.state = {
             active:0,
             navBackground:"none",
-            hideSearch: false,
+            hideSearch: true,
+            current: '/',
         }
+        this.changeActive = this.changeState.bind(this);
     }
-    
-    changeState = index => {
-        this.setState({ active: index })
-        if((index === 5) || (index === 4)){
-            this.setState({ hideSearch: true });
+
+    changeState(e){
+        let dataUrl = '';
+        if (e === null ){
+            dataUrl = window.location.pathname;
         } else {
-            this.setState({ hideSearch: false });
+            dataUrl = e.target.title;
+        }
+        switch (dataUrl){
+            case "/":
+                this.setState({ hideSearch: false, current: "/" });
+                break;
+            case "/about":
+                this.setState({ hideSearch: false, current: "/about" });
+                break;
+            case "/collections":
+                this.setState({ hideSearch: false, current: "/collections" });
+                break;
+            case "/products":
+                this.setState({ hideSearch: false, current: "/products" });
+                break;
+            case "/register":
+                this.setState({ hideSearch: true, current: "/register" });
+                break;
+            case "/signin":
+                this.setState({ hideSearch: true, current: "/signin" });
+                break;                
+            case "/choice":
+                this.setState({ hideSearch: true, current: "/choice" });
+                break;
+            case "/paypal":
+                this.setState({ hideSearch: true, current: "/paypal" });
+                break;
+            case "/cart":
+                this.setState({ hideSearch: true, current: "/cart" });
+                break;
+            default:
+                this.setState({ hideSearch: true, current: "/" });
+                break;
         }
     }
 
     componentDidMount = () => {
+        
+        this.changeState(null)
+
         document.addEventListener("scroll", () => {
             const bgColor = window.scrollY < 100 ? "none":"light";
             this.setState({ navBackground: bgColor });
@@ -33,9 +70,9 @@ class Navigation extends Component {
 
     render(){
         let navbar = this.props.navigation.navbar.map((item, i)=>{
-            let navisActive = this.state.active === i ? 'nav-link active' : 'nav-link';
+            let navisActive = this.state.current === item.url ? 'nav-link active' : 'nav-link';
                 return(
-                    <Link key={ i } to={ item.url } className={ navisActive } onClick={()=>this.changeState(i)}>{ item.label }</Link>
+                    <Link key={ i } title={item.url} to={ item.url } className={ navisActive } onClick={this.changeActive}>{ item.label }</Link>
                 );
         });
 
@@ -60,14 +97,14 @@ class Navigation extends Component {
                                 <Nav>
                                     { this.props.user === null ? (
                                         <>
-                                        <Link to="/register"  onClick={()=>this.changeState(4)} className={this.state.active === 4 ? 'active' : ''}>Register</Link>
-                                        <Link to="/signin" onClick={()=>this.changeState(5)} className={this.state.active === 5 ? 'active' : ''}>
+                                        <Link to="/register" title="/register" onClick={this.changeActive} className={this.state.current === '/register' ? 'active' : ''}>Register</Link>
+                                        <Link to="/signin" title="/signin" onClick={this.changeActive} className={this.state.current === '/signin' ? 'active' : ''}>
                                             Sign In
                                         </Link>
                                         </>
                                     ) : (
                                         <>
-                                        <NavDropdown title={this.props.user.displayName === null ? 'Welcome User' : 'Welcome '+this.props.user.displayName} id="basic-nav-dropdown" style={{ padding: "0 0.5rem !important" }}>
+                                        <NavDropdown title={this.props.user.firstName === null ? 'Welcome User' : 'Welcome '+this.props.user.firstName} id="basic-nav-dropdown" style={{ padding: "0 0.5rem !important" }}>
                                             <div style={{ display: "inline-grid" }}>
                                                 <Link to="/" style={{ padding: "10px " }}>Profile</Link>
                                                 <Link to="/" style={{ padding: "10px " }}>Address</Link>
@@ -77,7 +114,7 @@ class Navigation extends Component {
                                         </>
                                     ) }
                                     
-                                    <Link to="/cart">
+                                    <Link to="/cart" title="/cart"  onClick={this.changeActive}>
                                         | <span>
                                             <FaShoppingBag /> Bag &nbsp; 
                                                 <Badge pill variant="dark">
@@ -113,14 +150,14 @@ class Navigation extends Component {
                             <Nav>
                                 { this.props.user === null ? (
                                         <>
-                                        <Link to="/register"  onClick={()=>this.changeState(4)} className={this.state.active === 4 ? 'active' : ''}>Register</Link>
-                                        <Link to="/signin" onClick={()=>this.changeState(5)} className={this.state.active === 5 ? 'active' : ''}>
+                                        <Link to="/register" title="/register" onClick={this.changeActive} className={this.state.current === '/register' ? 'active' : ''}>Register</Link>
+                                        <Link to="/signin" title="/signin" onClick={this.changeActive} className={this.state.current === '/signin' ? 'active' : ''}>
                                             Sign In
                                         </Link>
                                         </>
                                     ) : (
                                         <>
-                                        <NavDropdown title={this.props.user.displayName === null ? 'Welcome User' : 'Welcome '+this.props.user.displayName} id="basic-nav-dropdown" style={{ padding: "0 0.5rem !important" }}>
+                                        <NavDropdown title={this.props.user.firstName === null ? 'Welcome User' : 'Welcome '+this.props.user.firstName} id="basic-nav-dropdown" style={{ padding: "0 0.5rem !important" }}>
                                             <div style={{ display: "inline-grid" }}>
                                                 <Link to="/" style={{ padding: "10px " }}>Profile</Link>
                                                 <Link to="/" style={{ padding: "10px " }}>Address</Link>
@@ -129,7 +166,7 @@ class Navigation extends Component {
                                         </NavDropdown>
                                         </>
                                 ) } 
-                                <Link to="/cart">
+                                <Link to="/cart" title="/cart"  onClick={this.changeActive}>
                                     | <span>
                                         <FaShoppingBag /> Bag &nbsp; 
                                             <Badge pill variant="dark">
@@ -154,6 +191,7 @@ class Navigation extends Component {
         );
     }
 }
+
 
 export default Navigation;
 
