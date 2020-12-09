@@ -50,9 +50,9 @@ class App extends Component {
     this.getAllproducts();
     this.getPopular();
     this.getCoupons();
-    this.getHeadline();
     this.getFooterNav();
     this.getUpcoming();
+    this.getHeadline();
     
     this.authListener();
   }
@@ -265,42 +265,42 @@ class App extends Component {
         this.setState({ 
           navigations: result
          });
-         console.log(this.state.navigations);
+         //console.log(this.state.navigations);
          break;
       case "headline":
         this.setState({ 
           headline: result,
           loading:false
          });
-         console.log(this.state.headline);
+         //console.log(this.state.headline);
          break;
       case "footer":
         this.setState({ 
           footer: result
          });
-         console.log(this.state.footer);
+         //console.log(this.state.footer);
          break;
       case "coupons":
         this.setState({ 
           coupons: result
          });
-         console.log(this.state.coupons);
+        //console.log(this.state.coupons);
          break;
       case "upcoming":
         this.setState({ upcoming: result }); 
-        console.log(this.state.upcoming);
+        //console.log(this.state.upcoming);
         break;
       case "popular":
         this.setState({ popular: result }); 
-        console.log(this.state.popular);
+        //console.log(this.state.popular);
         break;
       case "allProducts":
         this.setState({ allProducts: result });
-        console.log(this.state.allProducts);
+        //console.log(this.state.allProducts);
         break;
       case "collections":
         this.setState({ collections: result });
-        console.log(this.state.collections);
+        //console.log(this.state.collections);
         break;
       default:break;
     }
