@@ -5,10 +5,6 @@ import { FaFacebookSquare, FaGooglePlusSquare } from 'react-icons/fa';
 
 class CashDelivery extends Component {
 
-  constructor(props){
-    super(props);
-  }
-
   capitalizeFirstLetter(str){
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
