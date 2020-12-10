@@ -24,6 +24,9 @@ class Navigation extends Component {
         } else {
             dataUrl = e.target.title;
         }
+        
+        console.log(dataUrl);
+
         switch (dataUrl){
             case "/":
                 this.setState({ hideSearch: false, current: "/" });
